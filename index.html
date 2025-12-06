@@ -8,7 +8,7 @@
     <title>FitLifes!GO¡ - Club de Fitness Profesional</title>
 
     <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
-    
+
     <link rel="stylesheet" href="./assets/css/style.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,8 +33,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* Usando un color similar al del tema original */
-            background-color: rgba(0, 0, 0, 0.75); 
+            background-color: rgba(0, 0, 0, 0.75);
             display: none;
             justify-content: center;
             align-items: center;
@@ -49,7 +48,7 @@
 
         /* 2. Contenido de la Ventana Modal */
         .custom-modal-content {
-            background-color: white; /* Asumiendo que 'white' está definido en var(--white) o usar 'white' directamente */
+            background-color: white;
             padding: 30px;
             border-radius: 12px;
             width: 90%;
@@ -71,13 +70,13 @@
             display: flex;
             align-items: center;
             margin-bottom: 15px;
-            border-bottom: 1px solid #ddd; /* Usando un gris claro */
+            border-bottom: 1px solid #ddd;
             padding-bottom: 15px;
         }
 
         .modal-icon {
             font-size: 2.5rem;
-            color: orange; /* Usando naranja directo */
+            color: orange;
             margin-right: 15px;
         }
 
@@ -95,7 +94,7 @@
         }
 
         .contact-info-box {
-            background-color: #f0f0f0; 
+            background-color: #f0f0f0;
             padding: 15px;
             border-radius: 8px;
             text-align: center;
@@ -141,6 +140,12 @@
         .close-modal-btn {
             width: 100%;
         }
+
+        /* Estilo específico para el modal de advertencia */
+        .warning-text {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -161,9 +166,9 @@
 
                 <ul class="navbar-list">
                     <li><a href="#home" class="navbar-link active" data-nav-link>Inicio</a></li>
-                    <li><a href="#about" class="navbar-link" data-nav-link>Nosotros</a></li>
-                    <li><a href="#class" class="navbar-link" data-nav-link>Clases</a></li>
-                    <li><a href="#blog" class="navbar-link" data-nav-link>Blog</a></li>
+                    <li><a href="#" class="navbar-link" id="show-about-modal">Nosotros</a></li>
+                    <li><a href="#" class="navbar-link" id="show-classes-warning">Clases</a></li>
+                    <li><a href="#" class="navbar-link" id="show-blog-warning">Blog</a></li>
                     <li><a href="#" class="navbar-link" id="show-contact-modal">Contacto</a></li>
                 </ul>
             </nav>
@@ -238,7 +243,7 @@
 
     <div id="contactModal" class="custom-modal-overlay">
         <div class="custom-modal-content">
-            <button class="custom-modal-close-btn">&times;</button>
+            <button class="custom-modal-close-btn" data-modal-target="contactModal">&times;</button>
 
             <div class="modal-header">
                 <ion-icon name="help-circle-sharp" class="modal-icon"></ion-icon>
@@ -256,7 +261,49 @@
                 </a>
             </div>
 
-            <button class="btn btn-secondary close-modal-btn">Entendido</button>
+            <button class="btn btn-secondary close-modal-btn" data-modal-target="contactModal">Entendido</button>
+        </div>
+    </div>
+    
+    <div id="aboutModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <button class="custom-modal-close-btn" data-modal-target="aboutModal">&times;</button>
+
+            <div class="modal-header">
+                <ion-icon name="people-sharp" class="modal-icon"></ion-icon>
+                <h2 class="modal-title">Nuestro Proyecto y Creadores</h2>
+            </div>
+
+            <p class="modal-body-text">
+                Somos estudiantes del **CBTis 132 Hermosillo, Sonora**. Esta página fue creada con la finalidad de destacar y ayudar a gente en un futuro con este proyecto, ¡que ojalá algún día crezca más!
+            </p>
+            
+            <p class="info-label">**Equipo Creador:**</p>
+            <ul style="list-style: none; padding: 0; text-align: center;">
+                <li>Jesús Abraham López Gutiérrez</li>
+                <li>Jonathan Alexis Payán Enríquez</li>
+                <li>Sebastián Terán Rubio</li>
+                <li>Jesús Ernesto Cortez Ibarra</li>
+            </ul>
+
+            <button class="btn btn-secondary close-modal-btn" data-modal-target="aboutModal">¡Genial!</button>
+        </div>
+    </div>
+    
+    <div id="warningModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <button class="custom-modal-close-btn" data-modal-target="warningModal">&times;</button>
+
+            <div class="modal-header">
+                <ion-icon name="alert-circle-sharp" class="modal-icon" style="color: red;"></ion-icon>
+                <h2 class="modal-title warning-text">¡Acceso Restringido!</h2>
+            </div>
+
+            <p class="modal-body-text">
+                Debes iniciar sesión para acceder a las secciones de **Clases** y **Blog**. Por favor, regístrate o inicia sesión para ver este contenido.
+            </p>
+
+            <button class="btn btn-secondary close-modal-btn" data-modal-target="warningModal">Cerrar</button>
         </div>
     </div>
 
@@ -266,49 +313,91 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const contactLink = document.getElementById('show-contact-modal');
-            const modal = document.getElementById('contactModal');
             
-            // Función para mostrar la ventana
-            function showModal() {
-                modal.style.display = 'flex';
-                // Animación de entrada
-                setTimeout(() => {
-                    modal.classList.add('is-open');
-                    modal.querySelector('.custom-modal-content').classList.add('slide-in');
-                }, 10);
+            // Función genérica para mostrar cualquier modal
+            function showModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                    // Animación de entrada
+                    setTimeout(() => {
+                        modal.classList.add('is-open');
+                        modal.querySelector('.custom-modal-content').classList.add('slide-in');
+                    }, 10);
+                }
             }
 
-            // Función para ocultar la ventana
-            function closeModal() {
-                // Animación de salida
-                modal.classList.remove('is-open');
-                modal.querySelector('.custom-modal-content').classList.remove('slide-in');
-                
-                // Ocultar completamente después de la animación (300ms)
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                }, 300);
+            // Función genérica para ocultar cualquier modal
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    // Animación de salida
+                    modal.classList.remove('is-open');
+                    modal.querySelector('.custom-modal-content').classList.remove('slide-in');
+                    
+                    // Ocultar completamente después de la animación (300ms)
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                    }, 300);
+                }
             }
 
-            if (contactLink && modal) {
-                // Asignar evento para abrir el modal
-                contactLink.addEventListener('click', (e) => {
+            // Asignar eventos a los botones de cierre
+            document.querySelectorAll('.custom-modal-close-btn, .close-modal-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    showModal();
+                    // Usamos el ID del modal para cerrarlo
+                    const modalId = e.target.closest('.custom-modal-overlay').id;
+                    closeModal(modalId);
                 });
+            });
 
-                // Asignar eventos de cierre
-                const closeButtons = modal.querySelectorAll('.custom-modal-close-btn, .close-modal-btn');
-                closeButtons.forEach(btn => {
-                    btn.addEventListener('click', closeModal);
-                });
-
-                // Cerrar al hacer clic fuera del contenido
+            // Asignar evento para cerrar al hacer clic fuera
+            document.querySelectorAll('.custom-modal-overlay').forEach(modal => {
                 modal.addEventListener('click', (e) => {
                     if (e.target === modal) {
-                        closeModal();
+                        closeModal(modal.id);
                     }
+                });
+            });
+
+            // --- LÓGICA DE NAVEGACIÓN (Simulación de Sesión) ---
+
+            // Contacto
+            const contactLink = document.getElementById('show-contact-modal');
+            if (contactLink) {
+                contactLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showModal('contactModal');
+                });
+            }
+
+            // Nosotros
+            const aboutLink = document.getElementById('show-about-modal');
+            if (aboutLink) {
+                aboutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showModal('aboutModal');
+                });
+            }
+
+            // Clases (Requiere Sesión - Simulado)
+            const classesLink = document.getElementById('show-classes-warning');
+            if (classesLink) {
+                classesLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Como no hay sesión real, siempre muestra la advertencia
+                    showModal('warningModal');
+                });
+            }
+
+            // Blog (Requiere Sesión - Simulado)
+            const blogLink = document.getElementById('show-blog-warning');
+            if (blogLink) {
+                blogLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Como no hay sesión real, siempre muestra la advertencia
+                    showModal('warningModal');
                 });
             }
         });
