@@ -1,47 +1,318 @@
-<footer class="footer">
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitLifes!GO¡ - Club de Fitness Profesional</title>
+
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+    
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Catamaran:wght@600;700;800;900&family=Rubik:wght@400;500;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="preload" as="image" href="./assets/images/hero-banner.png">
+    <link rel="preload" as="image" href="./assets/images/hero-circle-one.png">
+    <link rel="preload" as="image" href="./assets/images/hero-circle-two.png">
+    <link rel="preload" as="image" href="./assets/images/heart-rate.svg">
+    <link rel="preload" as="image" href="./assets/images/calories.svg">
+
+    <style>
+        /* --- ESTILOS PROFESIONALES Y ANIMACIONES PARA EL MODAL DE CONTACTO --- */
+
+        /* 1. Capa de Superposición (Overlay) */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Usando un color similar al del tema original */
+            background-color: rgba(0, 0, 0, 0.75); 
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-modal-overlay.is-open {
+            opacity: 1;
+        }
+
+        /* 2. Contenido de la Ventana Modal */
+        .custom-modal-content {
+            background-color: white; /* Asumiendo que 'white' está definido en var(--white) o usar 'white' directamente */
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .custom-modal-content.slide-in {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* 3. Estilos del Encabezado */
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd; /* Usando un gris claro */
+            padding-bottom: 15px;
+        }
+
+        .modal-icon {
+            font-size: 2.5rem;
+            color: orange; /* Usando naranja directo */
+            margin-right: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin: 0;
+        }
+
+        /* 4. Cuerpo y Contacto */
+        .modal-body-text {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .contact-info-box {
+            background-color: #f0f0f0; 
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .info-label {
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .contact-email-link {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: orange;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-email-link:hover {
+            color: #333;
+        }
+
+        /* 5. Botón de Cierre */
+        .custom-modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #333;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .custom-modal-close-btn:hover {
+            transform: rotate(90deg);
+            color: orange;
+        }
+
+        .close-modal-btn {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body id="top">
+
+    <header class="header" data-header>
+        <div class="container">
+
+            <a href="#" class="logo">
+                <ion-icon name="barbell-sharp" aria-hidden="true"></ion-icon>
+                <span class="span">FitLifes!GO¡</span>
+            </a>
+
+            <nav class="navbar" data-navbar>
+                <button class="nav-close-btn" aria-label="cerrar menú" data-nav-toggler>
+                    <ion-icon name="close-sharp" aria-hidden="true"></ion-icon>
+                </button>
+
+                <ul class="navbar-list">
+                    <li><a href="#home" class="navbar-link active" data-nav-link>Inicio</a></li>
+                    <li><a href="#about" class="navbar-link" data-nav-link>Nosotros</a></li>
+                    <li><a href="#class" class="navbar-link" data-nav-link>Clases</a></li>
+                    <li><a href="#blog" class="navbar-link" data-nav-link>Blog</a></li>
+                    <li><a href="#" class="navbar-link" id="show-contact-modal">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <a href="#" class="btn btn-secondary">Únete Ahora</a>
+
+            <button class="nav-open-btn" aria-label="abrir menú" data-nav-toggler>
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </button>
+
+        </div>
+    </header>
+
+    <main>
+        <article>
+
+            <section class="section hero bg-dark has-after has-bg-image" id="home" aria-label="inicio" data-section
+                style="background-image: url('./assets/images/hero-bg.png')">
+                <div class="container">
+
+                    <div class="hero-content">
+
+                        <p class="hero-subtitle">
+                            <strong class="strong">El Mejor</strong> Club de Fitness
+                        </p>
+
+                        <h1 class="h1 hero-title">Esfuérzate por una Vida Mejor</h1>
+
+                        <p class="section-text">
+                            Transforma tu cuerpo y tu mente con nuestros programas personalizados y entrenadores
+                            expertos.
+                        </p>
+
+                        <a href="#" class="btn btn-primary">Empezar Ahora</a>
+
+                    </div>
+
+                    <div class="hero-banner">
+
+                        <img src="./assets/images/hero-banner.png" width="500" height="570" alt="Atleta entrenando"
+                            class="w-100">
+
+                        <img src="./assets/images/hero-circle-one.png" width="666" height="666" aria-hidden="true" alt=""
+                            class="circle circle-1">
+                        <img src="./assets/images/hero-circle-two.png" width="666" height="666" aria-hidden="true" alt=""
+                            class="circle circle-2">
+
+                        <img src="./assets/images/heart-rate.svg" width="255" height="270" alt="ritmo cardíaco"
+                            class="abs-img abs-img-1">
+                        <img src="./assets/images/calories.svg" width="348" height="224" alt="calorías"
+                            class="abs-img abs-img-2">
+
+                    </div>
+
+                </div>
+            </section>
+
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p class="copyright">
+                    &copy; 2025 FitLifes!GO¡. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
     </footer>
 
-  <div class="modal-overlay" id="contact-modal">
-    <div class="modal-content">
-      <button class="modal-close-btn" aria-label="Cerrar ventana" id="close-modal-btn">
-        <ion-icon name="close-sharp"></ion-icon>
-      </button>
+    <div id="contactModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <button class="custom-modal-close-btn">&times;</button>
 
-      <div class="modal-header">
-        <ion-icon name="help-circle-sharp" class="modal-icon"></ion-icon>
-        <h3 class="h3 modal-title">¿Necesitas Ayuda?</h3>
-      </div>
+            <div class="modal-header">
+                <ion-icon name="help-circle-sharp" class="modal-icon"></ion-icon>
+                <h2 class="modal-title">¿Necesitas Ayuda?</h2>
+            </div>
 
-      <p class="modal-text">
-        Estamos aquí para asistirte. Para soporte, consultas de membresía o información de clases, contáctanos a nuestro correo de soporte.
-      </p>
+            <p class="modal-body-text">
+                Estamos aquí para asistirte con cualquier duda sobre rutinas, membresías o soporte técnico.
+            </p>
 
-      <div class="contact-info-box">
-        <p><strong>Soporte Oficial:</strong></p>
-        <a href="mailto:fitlifesgo.soporte@gmail.com" class="contact-email-link">
-          fitlifesgo.soporte@gmail.com
-        </a>
-      </div>
+            <div class="contact-info-box">
+                <p class="info-label">Contáctanos por correo electrónico:</p>
+                <a href="mailto:fitlifesgo.soporte@gmail.com" class="contact-email-link">
+                    fitlifesgo.soporte@gmail.com
+                </a>
+            </div>
 
-      <button class="btn btn-primary" id="modal-ok-btn">Entendido</button>
+            <button class="btn btn-secondary close-modal-btn">Entendido</button>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Pequeño script para asegurar que el enlace de contacto tenga un ID para JS
-    document.addEventListener('DOMContentLoaded', () => {
-        const contactLink = document.querySelector('.navbar-list a[href="#"][data-nav-link]:last-child');
-        if (contactLink && contactLink.textContent.trim() === 'Contacto') {
-            contactLink.id = 'open-contact-modal';
-        }
-    });
-  </script>
 
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-  <script src="./assets/js/script.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const contactLink = document.getElementById('show-contact-modal');
+            const modal = document.getElementById('contactModal');
+            
+            // Función para mostrar la ventana
+            function showModal() {
+                modal.style.display = 'flex';
+                // Animación de entrada
+                setTimeout(() => {
+                    modal.classList.add('is-open');
+                    modal.querySelector('.custom-modal-content').classList.add('slide-in');
+                }, 10);
+            }
 
+            // Función para ocultar la ventana
+            function closeModal() {
+                // Animación de salida
+                modal.classList.remove('is-open');
+                modal.querySelector('.custom-modal-content').classList.remove('slide-in');
+                
+                // Ocultar completamente después de la animación (300ms)
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+
+            if (contactLink && modal) {
+                // Asignar evento para abrir el modal
+                contactLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showModal();
+                });
+
+                // Asignar eventos de cierre
+                const closeButtons = modal.querySelectorAll('.custom-modal-close-btn, .close-modal-btn');
+                closeButtons.forEach(btn => {
+                    btn.addEventListener('click', closeModal);
+                });
+
+                // Cerrar al hacer clic fuera del contenido
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
