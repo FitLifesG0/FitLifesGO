@@ -24,9 +24,7 @@
     <link rel="preload" as="image" href="./assets/images/calories.svg">
 
     <style>
-        /* --- ESTILOS COMPARTIDOS DEL MODAL Y FORMULARIO --- */
-        
-        /* 1. Capa de Superposición (Overlay) */
+        /* --- ESTILOS COMPARTIDOS DEL MODAL Y FORMULARIO (Sin Cambios Mayores) --- */
         .custom-modal-overlay {
             position: fixed;
             top: 0;
@@ -42,11 +40,8 @@
             transition: opacity 0.3s ease;
         }
 
-        .custom-modal-overlay.is-open {
-            opacity: 1;
-        }
+        .custom-modal-overlay.is-open { opacity: 1; }
 
-        /* 2. Contenido de la Ventana Modal */
         .custom-modal-content {
             background-color: white;
             padding: 30px;
@@ -65,7 +60,6 @@
             opacity: 1;
         }
 
-        /* 3. Estilos de Modal y Formulario */
         .modal-header {
             display: flex;
             align-items: center;
@@ -74,167 +68,106 @@
             padding-bottom: 15px;
         }
 
-        .modal-icon {
-            font-size: 2.5rem;
-            color: orange;
-            margin-right: 15px;
-        }
+        .modal-icon { font-size: 2.5rem; color: orange; margin-right: 15px; }
+        .modal-title { font-size: 1.8rem; color: #333; margin: 0; }
+        .auth-form input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .form-message { margin-top: 10px; padding: 10px; border-radius: 4px; text-align: center; font-weight: 500; }
+        .form-message.error { background-color: #f8d7da; color: #721c24; }
+        .form-message.success { background-color: #d4edda; color: #155724; }
 
-        .modal-title {
-            font-size: 1.8rem;
-            color: #333;
-            margin: 0;
-        }
-
-        .modal-body-text {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .custom-modal-close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 2rem;
-            color: #333;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .custom-modal-close-btn:hover {
-            transform: rotate(90deg);
-            color: orange;
-        }
-        
-        .auth-form .form-group {
-            margin-bottom: 15px;
-        }
-
-        .auth-form label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        .auth-form input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        
-        .auth-form button[type="submit"] {
-            width: 100%;
-            margin-top: 15px;
-        }
-        
-        .auth-toggle-link {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 0.85rem;
-        }
-        
-        .auth-toggle-link a {
-            color: #555;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .form-message {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .form-message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        .form-message.success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        /* --- DASHBOARD Y GRÁFICOS --- */
+        /* --- DASHBOARD Y GRÁFICOS MEJORADOS --- */
         #dashboard-section {
             display: none;
             min-height: 100vh;
-            padding-top: 100px;
-            background-color: #1a1a1a; /* Fondo oscuro similar al hero */
+            padding: 100px 20px 50px; /* Ajuste de padding */
+            background-color: #0d0d0d; /* Fondo más oscuro */
             color: white;
+            transition: all 0.5s ease-in-out;
         }
 
         .dashboard-container {
             max-width: 1200px;
             margin: auto;
-            padding: 20px;
         }
 
         .dashboard-title {
             text-align: center;
-            font-size: 3rem;
+            font-size: 3.5rem;
+            margin-bottom: 5px;
+            color: #ff6f00; /* Naranja más vibrante */
+        }
+        
+        .welcome-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
             margin-bottom: 40px;
-            color: orange;
+            color: #aaa;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
-            text-align: center;
         }
 
         .stat-card {
-            background: #2a2a2a;
-            padding: 20px;
+            background: #1a1a1a;
+            padding: 30px 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 0, 0, 0.3); /* Sutil efecto rojo/sombra */
         }
 
-        /* Estilo base para los círculos */
+        /* Gráfico circular con transición suave */
         .progress-circle {
-            width: 150px;
-            height: 150px;
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
             margin: 20px auto;
             position: relative;
-            background: conic-gradient(red var(--progress, 0%), transparent 0%);
+            background: conic-gradient(red 0%, red var(--progress, 0%), #444 0%);
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: --progress 1s ease; /* Transición CSS para la animación */
+            /* La transición se aplicará en JS al cambiar la variable CSS */
+            transition: background 1s linear; 
         }
 
-        /* El círculo interior (el hueco) */
         .progress-circle::after {
             content: '';
             position: absolute;
-            width: 130px;
-            height: 130px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            background: #1a1a1a; /* Color de fondo del dashboard */
+            background: #0d0d0d;
         }
 
         .progress-value {
             position: relative;
             z-index: 2;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 900;
             color: white;
         }
 
         .stat-label {
-            font-size: 1.1rem;
-            color: #aaa;
-            margin-top: 10px;
+            font-size: 1rem;
+            color: #ff6f00;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+        .stat-data {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-top: 5px;
         }
 
     </style>
@@ -256,11 +189,12 @@
                 </button>
 
                 <ul class="navbar-list">
-                    <li><a href="#home" class="navbar-link active" data-nav-link id="nav-home">Inicio</a></li>
+                    <li><a href="#" class="navbar-link active" data-nav-link id="nav-home">Inicio</a></li>
                     <li><a href="#" class="navbar-link" id="show-about-modal">Nosotros</a></li>
                     <li><a href="#" class="navbar-link" id="show-classes-warning">Clases</a></li>
                     <li><a href="#" class="navbar-link" id="show-blog-warning">Blog</a></li>
                     <li><a href="#" class="navbar-link" id="show-contact-modal">Contacto</a></li>
+                    
                     <li><a href="#" class="navbar-link nav-logged-in" id="nav-dashboard" style="display: none;">Mi Cuenta</a></li>
                     <li><a href="#" class="btn btn-secondary nav-logged-in" id="logout-btn" style="display: none;">Cerrar Sesión</a></li>
                 </ul>
@@ -323,41 +257,45 @@
             
             <section id="dashboard-section" aria-label="Mi Cuenta">
                 <div class="dashboard-container">
-                    <h1 class="dashboard-title">Dashboard de <span id="dash-username">Usuario</span></h1>
-                    <p style="text-align: center; margin-bottom: 40px;">¡Tu progreso en tiempo real!</p>
+                    <h1 class="dashboard-title">Dashboard</h1>
+                    <p class="welcome-subtitle">Bienvenido, <span id="dash-username">Usuario</span>. ¡Aquí está tu progreso!</p>
                     
                     <div class="stats-grid">
                         
                         <div class="stat-card">
-                            <h3>Progreso Semanal</h3>
-                            <div class="progress-circle" data-progress="75">
-                                <span class="progress-value">75%</span>
+                            <h3>Progreso Semanal 💪</h3>
+                            <div class="progress-circle" id="circle-progress">
+                                <span class="progress-value">--%</span>
                             </div>
-                            <p class="stat-label">Objetivo de entrenamiento semanal</p>
+                            <p class="stat-label">Objetivo de entrenamiento</p>
+                            <p class="stat-data" id="data-progress">0 de 5 sesiones completadas</p>
                         </div>
 
                         <div class="stat-card">
-                            <h3>Quema de Calorías</h3>
-                            <div class="progress-circle" data-progress="82">
-                                <span class="progress-value">820</span>
+                            <h3>Quema de Calorías 🔥</h3>
+                            <div class="progress-circle" id="circle-calories">
+                                <span class="progress-value">--</span>
                             </div>
                             <p class="stat-label">Kcal. quemadas hoy</p>
+                            <p class="stat-data" id="data-calories">Meta diaria: 700 Kcal.</p>
                         </div>
                         
                         <div class="stat-card">
-                            <h3>Ritmo Cardíaco</h3>
-                            <div class="progress-circle" data-progress="60">
-                                <span class="progress-value">135</span>
+                            <h3>Ritmo Cardíaco Prom. ❤️</h3>
+                            <div class="progress-circle" id="circle-bpm">
+                                <span class="progress-value">--</span>
                             </div>
                             <p class="stat-label">BPM promedio en sesión</p>
+                            <p class="stat-data" id="data-bpm">Zona óptima: 120-150 BPM</p>
                         </div>
                         
                         <div class="stat-card">
-                            <h3>Meta de Peso</h3>
-                            <div class="progress-circle" data-progress="35">
-                                <span class="progress-value">3.5</span>
+                            <h3>Meta de Peso ⚖️</h3>
+                            <div class="progress-circle" id="circle-weight">
+                                <span class="progress-value">--</span>
                             </div>
-                            <p class="stat-label">Kg. logrados este mes</p>
+                            <p class="stat-label">Kg. alcanzados este mes</p>
+                            <p class="stat-data" id="data-weight">Faltan 2.5 Kg. para el objetivo</p>
                         </div>
                         
                     </div>
@@ -507,15 +445,28 @@
 
             // --- VARIABLES GLOBALES Y ALMACENAMIENTO ---
             
-            // Simulación de "Base de Datos" (Advertencia: NO SEGURO)
             const USERS_STORAGE_KEY = 'fitlifesgo_users';
             let users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || '{}');
             
-            // Sesión actual
             let currentUser = JSON.parse(sessionStorage.getItem('fitlifesgo_session') || 'null');
+            
+            // Datos simulados (se genera un dato base por usuario al registrarse)
+            const getOrCreateUserData = (userEmail) => {
+                let data = JSON.parse(localStorage.getItem(`data_${userEmail}`) || 'null');
+                if (!data) {
+                    // Genera datos iniciales "reales" (cercanos a un valor típico)
+                    data = {
+                        sessions: 0, // 0 a 5 sesiones
+                        calories: Math.floor(Math.random() * (400 - 150 + 1) + 150), // 150-400 Kcal
+                        bpm: Math.floor(Math.random() * (150 - 120 + 1) + 120), // 120-150 BPM
+                        weight: (Math.random() * (4 - 0.5) + 0.5).toFixed(1) // 0.5 a 4.0 kg
+                    };
+                    localStorage.setItem(`data_${userEmail}`, JSON.stringify(data));
+                }
+                return data;
+            };
 
-
-            // --- FUNCIONES DE UTILIDAD DE INTERFAZ Y MODAL ---
+            // --- FUNCIONES DE UTILIDAD DE MODAL Y UI ---
 
             function showMessage(elementId, message, isSuccess) {
                 const el = document.getElementById(elementId);
@@ -552,6 +503,84 @@
                 document.getElementById('login-content').style.display = isRegister ? 'none' : 'block';
             }
             
+            // --- FUNCIONES DE DASHBOARD Y DATOS DINÁMICOS ---
+
+            function animateChart(circleId, progressPercentage) {
+                const circle = document.getElementById(circleId);
+                if (circle) {
+                    // Aplicamos el 0% inicial y luego el valor final para que CSS haga la animación
+                    circle.style.setProperty('--progress', `0%`);
+                    // Usamos requestAnimationFrame para asegurar que la UI se actualice antes de la transición
+                    requestAnimationFrame(() => {
+                         circle.style.setProperty('--progress', `${progressPercentage}%`);
+                    });
+                }
+            }
+
+            function renderDashboard(user) {
+                const userData = getOrCreateUserData(user.email);
+                
+                // 1. Progreso Semanal (Sesiones) - Max 5
+                const sessionsMax = 5;
+                const sessionsProgress = Math.min(userData.sessions, sessionsMax);
+                const progressPercent = (sessionsProgress / sessionsMax) * 100;
+                document.querySelector('#circle-progress .progress-value').textContent = `${sessionsProgress}/${sessionsMax}`;
+                document.getElementById('data-progress').textContent = `${sessionsProgress} de ${sessionsMax} sesiones completadas`;
+                animateChart('circle-progress', progressPercent);
+
+                // 2. Calorías (Meta 700 Kcal)
+                const caloriesGoal = 700;
+                const caloriesPercent = Math.min((userData.calories / caloriesGoal) * 100, 100);
+                document.querySelector('#circle-calories .progress-value').textContent = `${userData.calories}`;
+                document.getElementById('data-calories').textContent = `Meta diaria: ${caloriesGoal} Kcal.`;
+                animateChart('circle-calories', caloriesPercent);
+                
+                // 3. Ritmo Cardíaco (Meta 150 BPM)
+                const bpmMax = 150;
+                const bpmPercent = (userData.bpm / bpmMax) * 100;
+                document.querySelector('#circle-bpm .progress-value').textContent = `${userData.bpm}`;
+                document.getElementById('data-bpm').textContent = `Zona óptima: 120-150 BPM`;
+                animateChart('circle-bpm', bpmPercent);
+                
+                // 4. Peso (Meta de 5 Kg)
+                const weightGoal = 5;
+                const weightProgress = parseFloat(userData.weight);
+                const weightPercent = Math.min((weightProgress / weightGoal) * 100, 100);
+                document.querySelector('#circle-weight .progress-value').textContent = `${weightProgress} Kg.`;
+                document.getElementById('data-weight').textContent = `Meta: ${weightGoal} Kg. | Faltan ${(weightGoal - weightProgress).toFixed(1)} Kg.`;
+                animateChart('circle-weight', weightPercent);
+                
+                // Botón de prueba para simular progreso (lo hace más funcional)
+                const simButton = document.createElement('button');
+                simButton.textContent = "Simular Sesión de Entrenamiento 🚀";
+                simButton.className = "btn btn-primary";
+                simButton.style.marginTop = "30px";
+                simButton.onclick = () => {
+                    simulateWorkout(user.email);
+                };
+                
+                const container = document.querySelector('.dashboard-container');
+                const existingBtn = container.querySelector('.btn-primary');
+                if (existingBtn) existingBtn.remove();
+                container.appendChild(simButton);
+            }
+            
+            function simulateWorkout(userEmail) {
+                const userData = getOrCreateUserData(userEmail);
+
+                // Aumentar datos simulados de forma realista
+                userData.sessions = Math.min(userData.sessions + 1, 5); // Máximo 5 sesiones
+                userData.calories += Math.floor(Math.random() * (350 - 200 + 1) + 200);
+                userData.bpm = Math.floor(Math.random() * (145 - 130 + 1) + 130); 
+                userData.weight = (parseFloat(userData.weight) + (Math.random() * (0.5 - 0.1) + 0.1)).toFixed(1);
+
+                localStorage.setItem(`data_${userEmail}`, JSON.stringify(userData));
+                
+                // Forzar la re-renderización para mostrar nuevos datos y animaciones
+                renderDashboard(currentUser); 
+                alert('¡Sesión registrada! Datos actualizados.');
+            }
+
             // --- CONTROL DE SESIÓN Y CAMBIO DE PÁGINA (Inicio <-> Dashboard) ---
 
             function updateUI(user) {
@@ -565,10 +594,10 @@
                     
                     // Actualizar nombre de usuario y navegación
                     document.getElementById('dash-username').textContent = user.name || 'Usuario';
-                    loggedInElements.forEach(el => el.style.display = '');
+                    loggedInElements.forEach(el => el.style.display = 'inline-block');
                     loggedOutElements.forEach(el => el.style.display = 'none');
                     
-                    animateCharts(); // Iniciar animación del dashboard
+                    renderDashboard(user); // Cargar datos reales
                 } else {
                     // Mostrar Inicio, ocultar Dashboard
                     document.getElementById('home-section').style.display = 'block';
@@ -584,10 +613,10 @@
                 currentUser = null;
                 sessionStorage.removeItem('fitlifesgo_session');
                 updateUI(null);
-                alert('Sesión cerrada correctamente.');
+                alert('Sesión cerrada. ¡Vuelve pronto!');
             }
             
-            // --- FUNCIONALIDAD DE REGISTRO ---
+            // --- FUNCIONALIDAD DE REGISTRO/LOGIN ---
 
             document.getElementById('register-form').addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -606,18 +635,16 @@
 
                 showMessage('reg-message', '¡Registro exitoso! Iniciando sesión...', true);
                 
-                // Limpiar formulario y cerrar modal después del registro
                 setTimeout(() => {
                     closeModal('authModal');
-                    // Iniciar sesión automáticamente
                     currentUser = newUser;
                     sessionStorage.setItem('fitlifesgo_session', JSON.stringify(newUser));
+                    // Al registrarse, aseguramos que sus datos iniciales se creen
+                    getOrCreateUserData(email); 
                     updateUI(newUser);
                 }, 1500);
             });
             
-            // --- FUNCIONALIDAD DE INICIO DE SESIÓN ---
-
             document.getElementById('login-form').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('log-email').value.trim();
@@ -625,9 +652,8 @@
                 const user = users[email];
 
                 if (user && user.password === password) {
-                    showMessage('login-message', `¡Bienvenido, ${user.name}!`, true);
+                    showMessage('login-message', `¡Bienvenido de vuelta, ${user.name}!`, true);
                     
-                    // Guardar sesión y cambiar UI
                     setTimeout(() => {
                         closeModal('authModal');
                         currentUser = user;
@@ -640,19 +666,24 @@
                 }
             });
             
-            // --- FUNCIONALIDAD DE GRÁFICOS (Dashboard) ---
-            
-            function animateCharts() {
-                document.querySelectorAll('.progress-circle').forEach(circle => {
-                    const progress = circle.getAttribute('data-progress');
-                    // Establecer la variable CSS para animar el gráfico circular
-                    circle.style.setProperty('--progress', `${progress}%`);
-                });
-            }
-
             // --- CONFIGURACIÓN DE EVENT LISTENERS ---
 
-            // Asignar eventos de cierre de modales (ya manejados arriba)
+            // Asignar eventos de cierre de modales 
+            document.querySelectorAll('.custom-modal-close-btn, .close-modal-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const modalId = e.target.closest('.custom-modal-overlay').id;
+                    closeModal(modalId);
+                });
+            });
+
+            document.querySelectorAll('.custom-modal-overlay').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal(modal.id);
+                    }
+                });
+            });
             
             // Asignar evento de CERRAR SESIÓN
             document.getElementById('logout-btn').addEventListener('click', (e) => {
@@ -671,30 +702,18 @@
             });
             
             // Alternar entre Registro y Login
-            document.getElementById('link-to-login').addEventListener('click', (e) => {
-                e.preventDefault();
-                switchAuthContent(false);
-            });
-            
-            document.getElementById('link-to-register').addEventListener('click', (e) => {
-                e.preventDefault();
-                switchAuthContent(true);
-            });
+            document.getElementById('link-to-login').addEventListener('click', (e) => { e.preventDefault(); switchAuthContent(false); });
+            document.getElementById('link-to-register').addEventListener('click', (e) => { e.preventDefault(); switchAuthContent(true); });
 
             // Navegación de Inicio y Dashboard
             document.getElementById('nav-home').addEventListener('click', (e) => {
                 e.preventDefault();
-                updateUI(currentUser); // Mantiene el estado, pero regresa a la vista correcta
+                updateUI(null); // Siempre vuelve a la vista de inicio pública
             });
 
             document.getElementById('nav-dashboard').addEventListener('click', (e) => {
                 e.preventDefault();
-                if (currentUser) {
-                    updateUI(currentUser);
-                } else {
-                    // Si por alguna razón no hay sesión, mostrar advertencia
-                    showModal('warningModal'); 
-                }
+                updateUI(currentUser); // Muestra el dashboard si hay sesión
             });
 
 
@@ -704,11 +723,7 @@
             
             const warningLinks = document.querySelectorAll('#show-classes-warning, #show-blog-warning');
             warningLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    // Siempre muestra advertencia para clases/blog
-                    showModal('warningModal');
-                });
+                link.addEventListener('click', (e) => { e.preventDefault(); showModal('warningModal'); });
             });
 
             // --- INICIALIZACIÓN ---
