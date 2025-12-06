@@ -32,14 +32,26 @@
       </a>
 
       <nav class="navbar" data-navbar>
+        <button class="nav-close-btn" aria-label="cerrar menú" data-nav-toggler>
+          <ion-icon name="close-sharp" aria-hidden="true"></ion-icon>
+        </button>
+
         <ul class="navbar-list">
           <li><a href="#home" class="navbar-link active" data-nav-link>Inicio</a></li>
-          <li><a href="#" class="navbar-link" id="show-login">Iniciar Sesión</a></li>
-          <li><a href="#" class="navbar-link" id="show-register">Registrarse</a></li>
-          <li><a href="#" class="navbar-link hidden" id="show-dashboard">Mi Perfil</a></li>
-          <li><a href="#" class="navbar-link hidden" id="logout-btn">Cerrar Sesión</a></li>
+          <li><a href="#about" class="navbar-link" data-nav-link>Nosotros</a></li>
+          <li><a href="#class" class="navbar-link" data-nav-link>Clases</a></li>
+          <li><a href="#blog" class="navbar-link" data-nav-link>Blog</a></li>
+          <li><a href="#" class="navbar-link" data-nav-link>Contacto</a></li>
         </ul>
       </nav>
+
+      <a href="#" class="btn btn-secondary">Únete Ahora</a>
+
+      <button class="nav-open-btn" aria-label="abrir menú" data-nav-toggler>
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </button>
 
     </div>
   </header>
@@ -47,107 +59,32 @@
   <main>
     <article>
 
-      <section class="section hero bg-dark has-after has-bg-image" id="home" aria-label="hero" data-section
+      <section class="section hero bg-dark has-after has-bg-image" id="home" aria-label="inicio" data-section
         style="background-image: url('./assets/images/hero-bg.png')">
         <div class="container">
 
           <div class="hero-content">
-            <h1 class="h1 hero-title">¡Bienvenido a Fitlife!</h1>
-            <p class="section-text" id="welcome-message">
-              Esfuérzate por una vida mejor. Únete a la comunidad más grande de fitness.
+
+            <p class="hero-subtitle">
+              <strong class="strong">El Mejor</strong> Club de Fitness
             </p>
-            <div id="cta-buttons">
-              <a href="#" class="btn btn-primary" id="start-register">Regístrate Hoy</a>
-              <a href="#" class="btn btn-secondary" id="start-login">Ya soy miembro</a>
-            </div>
+
+            <h1 class="h1 hero-title">Esfuérzate por una Vida Mejor</h1>
+
+            <p class="section-text">
+              Transforma tu cuerpo y tu mente con nuestros programas personalizados y entrenadores expertos.
+            </p>
+
+            <a href="#" class="btn btn-primary">Empezar Ahora</a>
+
           </div>
 
           <div class="hero-banner">
+
             <img src="./assets/images/hero-banner.png" width="500" height="570" alt="Atleta entrenando" class="w-100">
+
           </div>
 
-        </div>
-      </section>
-
-      <section class="section form-section" id="register-section">
-        <div class="container small-container">
-          <h2 class="h2 section-title text-center">Crear Cuenta Fitlife</h2>
-
-          <form id="registration-form" class="auth-form">
-
-            <div class="form-group">
-              <label for="reg-name">Nombre Completo</label>
-              <input type="text" id="reg-name" required placeholder="Tu nombre">
-            </div>
-
-            <div class="form-group half-width">
-              <label for="reg-age">Edad</label>
-              <input type="number" id="reg-age" required min="16" max="100" placeholder="Ej: 25">
-            </div>
-
-            <div class="form-group half-width">
-              <label for="reg-height">Altura (cm)</label>
-              <input type="number" id="reg-height" required min="100" max="250" placeholder="Ej: 175">
-            </div>
-
-            <div class="form-group half-width">
-              <label for="reg-weight">Peso (kg)</label>
-              <input type="number" id="reg-weight" required min="30" max="300" placeholder="Ej: 70">
-            </div>
-            
-            <div class="form-group full-width">
-              <label for="reg-email">Correo Electrónico</label>
-              <input type="email" id="reg-email" required placeholder="tu.correo@ejemplo.com">
-            </div>
-
-            <div class="form-group full-width">
-              <label for="reg-password">Contraseña</label>
-              <input type="password" id="reg-password" required minlength="6" placeholder="Mínimo 6 caracteres">
-            </div>
-
-            <button type="submit" class="btn btn-primary full-width">Registrarme</button>
-            <p class="form-toggle-text">¿Ya tienes cuenta? <a href="#" id="link-to-login">Inicia sesión</a></p>
-            <p id="reg-message" class="message"></p>
-          </form>
-
-        </div>
-      </section>
-
-      <section class="section form-section" id="login-section">
-        <div class="container small-container">
-          <h2 class="h2 section-title text-center">Acceder a Mi Cuenta</h2>
-
-          <form id="login-form" class="auth-form">
-
-            <div class="form-group full-width">
-              <label for="log-email">Correo Electrónico</label>
-              <input type="email" id="log-email" required placeholder="tu.correo@ejemplo.com">
-            </div>
-
-            <div class="form-group full-width">
-              <label for="log-password">Contraseña</label>
-              <input type="password" id="log-password" required placeholder="Tu contraseña secreta">
-            </div>
-
-            <button type="submit" class="btn btn-primary full-width">Iniciar Sesión</button>
-            <p class="form-toggle-text">¿No tienes cuenta? <a href="#" id="link-to-register">Regístrate</a></p>
-            <p id="login-message" class="message"></p>
-          </form>
-
-        </div>
-      </section>
-
-      <section class="section form-section" id="dashboard-section">
-        <div class="container small-container">
-          <h2 class="h2 section-title text-center">Mi Perfil</h2>
-          <div class="profile-card">
-              <p><strong>Usuario:</strong> <span id="dash-username"></span></p>
-              <p><strong>Correo:</strong> <span id="dash-email"></span></p>
-              <p><strong>Edad:</strong> <span id="dash-age"></span></p>
-              <p><strong>Peso:</strong> <span id="dash-weight"></span> kg</p>
-              <p><strong>Altura:</strong> <span id="dash-height"></span> cm</p>
-              <button id="dashboard-logout-btn" class="btn btn-secondary full-width">Cerrar Sesión</button>
-          </div>
         </div>
       </section>
 
