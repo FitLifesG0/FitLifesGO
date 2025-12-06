@@ -24,8 +24,8 @@
     <link rel="preload" as="image" href="./assets/images/calories.svg">
 
     <style>
-        /* --- ESTILOS COMPARTIDOS DEL MODAL --- */
-
+        /* --- ESTILOS COMPARTIDOS DEL MODAL Y FORMULARIO --- */
+        
         /* 1. Capa de Superposición (Overlay) */
         .custom-modal-overlay {
             position: fixed;
@@ -65,7 +65,7 @@
             opacity: 1;
         }
 
-        /* 3. Estilos del Encabezado */
+        /* 3. Estilos de Modal y Formulario */
         .modal-header {
             display: flex;
             align-items: center;
@@ -86,37 +86,10 @@
             margin: 0;
         }
 
-        /* 4. Cuerpo y Botones de Cierre */
         .modal-body-text {
             color: #555;
             line-height: 1.6;
             margin-bottom: 20px;
-        }
-
-        .contact-info-box {
-            background-color: #f0f0f0;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .info-label {
-            color: #333;
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-
-        .contact-email-link {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: orange;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .contact-email-link:hover {
-            color: #333;
         }
 
         .custom-modal-close-btn {
@@ -135,17 +108,7 @@
             transform: rotate(90deg);
             color: orange;
         }
-
-        .close-modal-btn {
-            width: 100%;
-        }
-
-        .warning-text {
-            color: red;
-            font-weight: bold;
-        }
         
-        /* --- ESTILOS ESPECÍFICOS DEL FORMULARIO DE AUTENTICACIÓN --- */
         .auth-form .form-group {
             margin-bottom: 15px;
         }
@@ -158,14 +121,12 @@
             color: #333;
         }
         
-        .auth-form input[type="text"], 
-        .auth-form input[type="email"], 
-        .auth-form input[type="password"] {
+        .auth-form input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* Importante para el padding */
+            box-sizing: border-box;
         }
         
         .auth-form button[type="submit"] {
@@ -185,10 +146,97 @@
             transition: color 0.2s;
         }
         
-        .auth-toggle-link a:hover {
-            color: orange;
-            text-decoration: underline;
+        .form-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 500;
         }
+
+        .form-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        /* --- DASHBOARD Y GRÁFICOS --- */
+        #dashboard-section {
+            display: none;
+            min-height: 100vh;
+            padding-top: 100px;
+            background-color: #1a1a1a; /* Fondo oscuro similar al hero */
+            color: white;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .dashboard-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            color: orange;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilo base para los círculos */
+        .progress-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+            background: conic-gradient(red var(--progress, 0%), transparent 0%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: --progress 1s ease; /* Transición CSS para la animación */
+        }
+
+        /* El círculo interior (el hueco) */
+        .progress-circle::after {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #1a1a1a; /* Color de fondo del dashboard */
+        }
+
+        .progress-value {
+            position: relative;
+            z-index: 2;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-top: 10px;
+        }
+
     </style>
 </head>
 
@@ -208,15 +256,17 @@
                 </button>
 
                 <ul class="navbar-list">
-                    <li><a href="#home" class="navbar-link active" data-nav-link>Inicio</a></li>
+                    <li><a href="#home" class="navbar-link active" data-nav-link id="nav-home">Inicio</a></li>
                     <li><a href="#" class="navbar-link" id="show-about-modal">Nosotros</a></li>
                     <li><a href="#" class="navbar-link" id="show-classes-warning">Clases</a></li>
                     <li><a href="#" class="navbar-link" id="show-blog-warning">Blog</a></li>
                     <li><a href="#" class="navbar-link" id="show-contact-modal">Contacto</a></li>
+                    <li><a href="#" class="navbar-link nav-logged-in" id="nav-dashboard" style="display: none;">Mi Cuenta</a></li>
+                    <li><a href="#" class="btn btn-secondary nav-logged-in" id="logout-btn" style="display: none;">Cerrar Sesión</a></li>
                 </ul>
             </nav>
 
-            <a href="#" class="btn btn-secondary" id="open-auth-modal-header">Únete Ahora</a>
+            <a href="#" class="btn btn-secondary nav-logged-out" id="open-auth-modal-header">Únete Ahora</a>
 
             <button class="nav-open-btn" aria-label="abrir menú" data-nav-toggler>
                 <span class="line"></span>
@@ -230,8 +280,8 @@
     <main>
         <article>
 
-            <section class="section hero bg-dark has-after has-bg-image" id="home" aria-label="inicio" data-section
-                style="background-image: url('./assets/images/hero-bg.png')">
+            <section class="section hero bg-dark has-after has-bg-image" id="home-section" aria-label="inicio" data-section
+                style="background-image: url('./assets/images/hero-bg.png'); min-height: 100vh;">
                 <div class="container">
 
                     <div class="hero-content">
@@ -247,7 +297,7 @@
                             expertos.
                         </p>
 
-                        <a href="#" class="btn btn-primary" id="open-auth-modal-hero">Empezar Ahora</a>
+                        <a href="#" class="btn btn-primary nav-logged-out" id="open-auth-modal-hero">Empezar Ahora</a>
 
                     </div>
 
@@ -268,6 +318,50 @@
 
                     </div>
 
+                </div>
+            </section>
+            
+            <section id="dashboard-section" aria-label="Mi Cuenta">
+                <div class="dashboard-container">
+                    <h1 class="dashboard-title">Dashboard de <span id="dash-username">Usuario</span></h1>
+                    <p style="text-align: center; margin-bottom: 40px;">¡Tu progreso en tiempo real!</p>
+                    
+                    <div class="stats-grid">
+                        
+                        <div class="stat-card">
+                            <h3>Progreso Semanal</h3>
+                            <div class="progress-circle" data-progress="75">
+                                <span class="progress-value">75%</span>
+                            </div>
+                            <p class="stat-label">Objetivo de entrenamiento semanal</p>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Quema de Calorías</h3>
+                            <div class="progress-circle" data-progress="82">
+                                <span class="progress-value">820</span>
+                            </div>
+                            <p class="stat-label">Kcal. quemadas hoy</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Ritmo Cardíaco</h3>
+                            <div class="progress-circle" data-progress="60">
+                                <span class="progress-value">135</span>
+                            </div>
+                            <p class="stat-label">BPM promedio en sesión</p>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Meta de Peso</h3>
+                            <div class="progress-circle" data-progress="35">
+                                <span class="progress-value">3.5</span>
+                            </div>
+                            <p class="stat-label">Kg. logrados este mes</p>
+                        </div>
+                        
+                    </div>
+                    
                 </div>
             </section>
 
@@ -330,7 +424,7 @@
         <div class="custom-modal-content">
             <button class="custom-modal-close-btn" data-modal-target="warningModal">&times;</button>
             <div class="modal-header">
-                <ion-icon name="alert-circle-sharp" class="modal-icon warning-text"></ion-icon>
+                <ion-icon name="alert-circle-sharp" class="modal-icon warning-text" style="color: red;"></ion-icon>
                 <h2 class="modal-title warning-text">¡Acceso Restringido!</h2>
             </div>
             <p class="modal-body-text">
@@ -340,18 +434,18 @@
             <button class="btn btn-secondary close-modal-btn" data-modal-target="warningModal">Cerrar</button>
         </div>
     </div>
-    
+
     <div id="authModal" class="custom-modal-overlay">
         <div class="custom-modal-content">
             <button class="custom-modal-close-btn" data-modal-target="authModal">&times;</button>
-            
+
             <div id="register-content">
                 <div class="modal-header">
                     <ion-icon name="person-add-sharp" class="modal-icon"></ion-icon>
                     <h2 class="modal-title">Regístrate Ahora</h2>
                 </div>
 
-                <form class="auth-form" onsubmit="event.preventDefault()">
+                <form class="auth-form" id="register-form">
                     <div class="form-group">
                         <label for="reg-name">Nombre</label>
                         <input type="text" id="reg-name" placeholder="Tu nombre completo" required>
@@ -364,22 +458,24 @@
                         <label for="reg-password">Contraseña</label>
                         <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" minlength="6" required>
                     </div>
+
                     <button type="submit" class="btn btn-primary">Crear Cuenta FitLifes!GO¡</button>
+                    <p id="reg-message" class="form-message" style="display: none;"></p>
                 </form>
-                
+
                 <p class="auth-toggle-link">
-                    ¿Ya tienes una cuenta? 
+                    ¿Ya tienes una cuenta?
                     <a href="#" id="link-to-login">Inicia Sesión</a>
                 </p>
             </div>
-            
+
             <div id="login-content" style="display: none;">
                 <div class="modal-header">
                     <ion-icon name="log-in-sharp" class="modal-icon"></ion-icon>
                     <h2 class="modal-title">Iniciar Sesión</h2>
                 </div>
-                
-                <form class="auth-form" onsubmit="event.preventDefault()">
+
+                <form class="auth-form" id="login-form">
                     <div class="form-group">
                         <label for="log-email">Correo Electrónico</label>
                         <input type="email" id="log-email" placeholder="ejemplo@correo.com" required>
@@ -388,16 +484,17 @@
                         <label for="log-password">Contraseña</label>
                         <input type="password" id="log-password" placeholder="Tu contraseña" required>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary">Acceder</button>
+                    <p id="login-message" class="form-message" style="display: none;"></p>
                 </form>
-                
+
                 <p class="auth-toggle-link">
-                    ¿No tienes una cuenta? 
+                    ¿No tienes una cuenta?
                     <a href="#" id="link-to-register">Regístrate</a>
                 </p>
             </div>
-            
+
         </div>
     </div>
 
@@ -407,15 +504,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- Funciones de Utilidad de Modal ---
 
-            // Función genérica para mostrar cualquier modal
+            // --- VARIABLES GLOBALES Y ALMACENAMIENTO ---
+            
+            // Simulación de "Base de Datos" (Advertencia: NO SEGURO)
+            const USERS_STORAGE_KEY = 'fitlifesgo_users';
+            let users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || '{}');
+            
+            // Sesión actual
+            let currentUser = JSON.parse(sessionStorage.getItem('fitlifesgo_session') || 'null');
+
+
+            // --- FUNCIONES DE UTILIDAD DE INTERFAZ Y MODAL ---
+
+            function showMessage(elementId, message, isSuccess) {
+                const el = document.getElementById(elementId);
+                el.textContent = message;
+                el.className = `form-message ${isSuccess ? 'success' : 'error'}`;
+                el.style.display = 'block';
+                setTimeout(() => { el.style.display = 'none'; }, 5000);
+            }
+
             function showModal(modalId) {
                 const modal = document.getElementById(modalId);
                 if (modal) {
                     modal.style.display = 'flex';
-                    // Animación de entrada
                     setTimeout(() => {
                         modal.classList.add('is-open');
                         modal.querySelector('.custom-modal-content').classList.add('slide-in');
@@ -423,57 +536,136 @@
                 }
             }
 
-            // Función genérica para ocultar cualquier modal
             function closeModal(modalId) {
                 const modal = document.getElementById(modalId);
                 if (modal) {
-                    // Animación de salida
                     modal.classList.remove('is-open');
                     modal.querySelector('.custom-modal-content').classList.remove('slide-in');
-                    
-                    // Ocultar completamente después de la animación (300ms)
                     setTimeout(() => {
                         modal.style.display = 'none';
                     }, 300);
                 }
             }
             
-            // Función para cambiar entre Registro y Login dentro del AuthModal
             function switchAuthContent(isRegister) {
                 document.getElementById('register-content').style.display = isRegister ? 'block' : 'none';
                 document.getElementById('login-content').style.display = isRegister ? 'none' : 'block';
             }
+            
+            // --- CONTROL DE SESIÓN Y CAMBIO DE PÁGINA (Inicio <-> Dashboard) ---
 
+            function updateUI(user) {
+                const loggedInElements = document.querySelectorAll('.nav-logged-in');
+                const loggedOutElements = document.querySelectorAll('.nav-logged-out');
 
-            // --- LÓGICA DE EVENTOS DE CIERRE (Común a todos los modales) ---
+                if (user) {
+                    // Mostrar Dashboard, ocultar Inicio
+                    document.getElementById('home-section').style.display = 'none';
+                    document.getElementById('dashboard-section').style.display = 'block';
+                    
+                    // Actualizar nombre de usuario y navegación
+                    document.getElementById('dash-username').textContent = user.name || 'Usuario';
+                    loggedInElements.forEach(el => el.style.display = '');
+                    loggedOutElements.forEach(el => el.style.display = 'none');
+                    
+                    animateCharts(); // Iniciar animación del dashboard
+                } else {
+                    // Mostrar Inicio, ocultar Dashboard
+                    document.getElementById('home-section').style.display = 'block';
+                    document.getElementById('dashboard-section').style.display = 'none';
 
-            // Asignar eventos a los botones de cierre
-            document.querySelectorAll('.custom-modal-close-btn, .close-modal-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    // Usamos el ID del modal para cerrarlo
-                    const modalId = e.target.closest('.custom-modal-overlay').id;
-                    closeModal(modalId);
+                    // Ocultar elementos de sesión
+                    loggedInElements.forEach(el => el.style.display = 'none');
+                    loggedOutElements.forEach(el => el.style.display = '');
+                }
+            }
+
+            function logout() {
+                currentUser = null;
+                sessionStorage.removeItem('fitlifesgo_session');
+                updateUI(null);
+                alert('Sesión cerrada correctamente.');
+            }
+            
+            // --- FUNCIONALIDAD DE REGISTRO ---
+
+            document.getElementById('register-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('reg-name').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const password = document.getElementById('reg-password').value;
+
+                if (users[email]) {
+                    showMessage('reg-message', 'Error: Este correo ya está registrado.', false);
+                    return;
+                }
+
+                const newUser = { name, email, password };
+                users[email] = newUser;
+                localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+
+                showMessage('reg-message', '¡Registro exitoso! Iniciando sesión...', true);
+                
+                // Limpiar formulario y cerrar modal después del registro
+                setTimeout(() => {
+                    closeModal('authModal');
+                    // Iniciar sesión automáticamente
+                    currentUser = newUser;
+                    sessionStorage.setItem('fitlifesgo_session', JSON.stringify(newUser));
+                    updateUI(newUser);
+                }, 1500);
+            });
+            
+            // --- FUNCIONALIDAD DE INICIO DE SESIÓN ---
+
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('log-email').value.trim();
+                const password = document.getElementById('log-password').value;
+                const user = users[email];
+
+                if (user && user.password === password) {
+                    showMessage('login-message', `¡Bienvenido, ${user.name}!`, true);
+                    
+                    // Guardar sesión y cambiar UI
+                    setTimeout(() => {
+                        closeModal('authModal');
+                        currentUser = user;
+                        sessionStorage.setItem('fitlifesgo_session', JSON.stringify(user));
+                        updateUI(user);
+                    }, 1500);
+
+                } else {
+                    showMessage('login-message', 'Error: Correo o contraseña incorrectos.', false);
+                }
+            });
+            
+            // --- FUNCIONALIDAD DE GRÁFICOS (Dashboard) ---
+            
+            function animateCharts() {
+                document.querySelectorAll('.progress-circle').forEach(circle => {
+                    const progress = circle.getAttribute('data-progress');
+                    // Establecer la variable CSS para animar el gráfico circular
+                    circle.style.setProperty('--progress', `${progress}%`);
                 });
+            }
+
+            // --- CONFIGURACIÓN DE EVENT LISTENERS ---
+
+            // Asignar eventos de cierre de modales (ya manejados arriba)
+            
+            // Asignar evento de CERRAR SESIÓN
+            document.getElementById('logout-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
             });
 
-            // Cerrar al hacer clic fuera del contenido
-            document.querySelectorAll('.custom-modal-overlay').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        closeModal(modal.id);
-                    }
-                });
-            });
-
-            // --- LÓGICA DE APERTURA DE MODALES ESPECÍFICOS ---
-
-            // 1. MODAL DE AUTENTICACIÓN (REGISTRO/LOGIN)
+            // Apertura de Modal de Autenticación
             const authTriggers = document.querySelectorAll('#open-auth-modal-header, #open-auth-modal-hero');
             authTriggers.forEach(trigger => {
                 trigger.addEventListener('click', (e) => {
                     e.preventDefault();
-                    switchAuthContent(true); // Siempre inicia mostrando el registro
+                    switchAuthContent(true); 
                     showModal('authModal');
                 });
             });
@@ -489,34 +681,38 @@
                 switchAuthContent(true);
             });
 
+            // Navegación de Inicio y Dashboard
+            document.getElementById('nav-home').addEventListener('click', (e) => {
+                e.preventDefault();
+                updateUI(currentUser); // Mantiene el estado, pero regresa a la vista correcta
+            });
 
-            // 2. MODAL DE CONTACTO
-            const contactLink = document.getElementById('show-contact-modal');
-            if (contactLink) {
-                contactLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showModal('contactModal');
-                });
-            }
+            document.getElementById('nav-dashboard').addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentUser) {
+                    updateUI(currentUser);
+                } else {
+                    // Si por alguna razón no hay sesión, mostrar advertencia
+                    showModal('warningModal'); 
+                }
+            });
 
-            // 3. MODAL NOSOTROS
-            const aboutLink = document.getElementById('show-about-modal');
-            if (aboutLink) {
-                aboutLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showModal('aboutModal');
-                });
-            }
 
-            // 4. MODAL ADVERTENCIA (Clases y Blog)
+            // Modales de información/advertencia
+            document.getElementById('show-contact-modal').addEventListener('click', (e) => { e.preventDefault(); showModal('contactModal'); });
+            document.getElementById('show-about-modal').addEventListener('click', (e) => { e.preventDefault(); showModal('aboutModal'); });
+            
             const warningLinks = document.querySelectorAll('#show-classes-warning, #show-blog-warning');
             warningLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
+                    // Siempre muestra advertencia para clases/blog
                     showModal('warningModal');
                 });
             });
-            
+
+            // --- INICIALIZACIÓN ---
+            updateUI(currentUser);
         });
     </script>
 </body>
