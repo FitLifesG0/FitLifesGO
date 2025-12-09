@@ -17,187 +17,198 @@
         rel="stylesheet">
     
     <style>
-        /* Estilos de Modales compartidos - Se necesitan para About/Contact */
+        /* --- General y Modales (Ajuste de color a Rojo) --- */
+        
         .custom-modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9); /* Más oscuro */
+            display: none; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; transition: opacity 0.3s ease;
         }
 
         .custom-modal-overlay.is-open { opacity: 1; display: flex; }
 
         .custom-modal-content {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            position: relative;
-            transform: translateY(-50px);
-            opacity: 0;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            color: #333;
+            background-color: #222; /* Fondo oscuro */
+            color: #fff;
+            padding: 30px; border-radius: 12px; width: 90%; max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            position: relative; transform: translateY(-50px);
+            opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out;
         }
 
-        .custom-modal-content.slide-in {
-            transform: translateY(0);
-            opacity: 1;
-        }
+        .custom-modal-close-btn { color: #fff; }
+        .modal-header { border-bottom: 2px solid #ff0000; padding-bottom: 10px; }
+        .modal-icon { color: #ff0000; }
+        .modal-title { color: #fff; }
 
-        .custom-modal-close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #333;
-        }
-        
-        .modal-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #ff6f00; 
-            padding-bottom: 10px;
-        }
-
-        .modal-icon { font-size: 2.5rem; color: #ff6f00; margin-right: 15px; }
-        .modal-title { font-size: 2rem; color: #000; margin: 0; }
-        
         .btn-primary { 
-            background-color: #ff6f00; 
-            color: white; 
-            border: none; 
-            padding: 12px 25px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            transition: background-color 0.3s;
-            display: block;
-            width: 100%;
-            font-weight: bold;
-            text-transform: uppercase;
+            background-color: #ff0000; /* ROJO */
+            color: white; border: none; padding: 12px 25px; 
+            border-radius: 5px; cursor: pointer; transition: background-color 0.3s;
+            display: block; width: 100%; font-weight: bold; text-transform: uppercase;
         }
-        .btn-primary:hover { background-color: #e65c00; }
+        .btn-primary:hover { background-color: #cc0000; }
         
-        /* Estilos del cuerpo del Dashboard */
+        /* --- Estilos del cuerpo del Dashboard (Gris Claro) --- */
         #dashboard-section {
             min-height: 100vh;
-            padding: 100px 20px 50px; 
-            background-color: #0d0d0d; 
-            color: white;
+            padding: 100px 50px 50px; 
+            background-color: #e9e9e9; 
+            color: #333;
         }
 
-        .dashboard-container {
-            max-width: 1200px;
-            margin: auto;
-        }
+        .dashboard-container { max-width: 1400px; margin: auto; }
 
+        .dashboard-subtitle { font-size: 1.5rem; color: #555; margin-bottom: 5px; }
         .dashboard-title {
-            text-align: center;
             font-size: 3.5rem;
             margin-bottom: 5px;
-            color: #ff6f00; 
-            font-weight: 900;
+            color: #ff0000; /* ROJO */
+            font-weight: 800;
         }
         
-        .welcome-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            color: #aaa;
-        }
+        .welcome-subtitle { font-size: 1rem; margin-bottom: 40px; color: #777; }
+        .dashboard-section-title { font-size: 2rem; margin: 30px 0 20px 0; color: #333; font-weight: 700; }
 
+        /* --- Grid y Tarjetas de Estadísticas --- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Más pequeñas */
+            gap: 20px;
         }
 
         .stat-card {
-            background: #1a1a1a;
-            padding: 30px 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
-            border: 1px solid #333;
+            background: #1e1e1e; /* Fondo Oscuro */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             transition: transform 0.3s ease;
             text-align: center;
+            color: #fff;
+            height: 250px; /* Tamaño fijo para consistencia */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(255, 111, 0, 0.3); 
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.5); 
         }
 
-        /* Gráfico circular con transición suave */
+        /* Título pequeño de la tarjeta */
+        .stat-card h3 {
+            font-size: 1rem;
+            color: #aaa;
+            margin: 0;
+            text-align: left;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #333;
+        }
+
+        /* --- Gráfico Circular Estilizado --- */
         .progress-circle {
-            width: 160px;
-            height: 160px;
+            width: 100px; /* Más pequeño */
+            height: 100px; /* Más pequeño */
             border-radius: 50%;
-            margin: 20px auto;
+            margin: 10px auto;
             position: relative;
-            /* Se establece la variable CSS --progress para la animación JS */
-            background: conic-gradient(#ff6f00 0%, #ff6f00 var(--progress, 0%), #444 0%); 
+            /* ROJO para el progreso, NEGRO para el fondo */
+            background: conic-gradient(#ff0000 0%, #ff0000 var(--progress, 0%), #444 0%); 
             display: flex;
             justify-content: center;
             align-items: center;
             transition: background 1s linear; 
+            border: 3px solid #ff0000; /* Borde rojo */
         }
 
         .progress-circle::after {
             content: '';
             position: absolute;
-            width: 140px;
-            height: 140px;
+            width: 90px; /* Borde más delgado */
+            height: 90px;
             border-radius: 50%;
-            background: #0d0d0d;
+            background: #1e1e1e; /* Fondo de la tarjeta */
         }
 
         .progress-value {
             position: relative;
             z-index: 2;
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: white;
+            font-size: 1.5rem; /* Tamaño ajustado */
+            font-weight: 700;
+            color: #fff;
         }
 
-        .stat-label {
-            font-size: 1rem;
-            color: #ff6f00;
-            margin-top: 15px;
+        /* --- Contenedor de datos (Abajo del círculo) --- */
+        .stat-footer {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+        }
+
+        .stat-info span {
+            display: block;
+            font-size: 0.8rem;
+            color: #fff;
             font-weight: bold;
         }
-        
-        .stat-data {
-            font-size: 0.9rem;
-            color: #ccc;
-            margin-top: 5px;
-        }
 
+        .stat-info small {
+            font-size: 0.7rem;
+            color: #ff0000; /* Dato de meta en rojo */
+        }
+        
         .btn-simulate {
-            margin: 30px auto;
+            margin: 40px auto;
             display: block;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            background-color: #ff6f00;
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            background-color: #ff0000;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            font-weight: bold;
         }
 
         .btn-simulate:hover {
-            background-color: #e65c00;
+            background-color: #cc0000;
+        }
+
+        /* --- Galería (Nueva Sección) --- */
+        .gallery-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #ff0000;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding-bottom: 50px;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-grid img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
@@ -209,8 +220,7 @@
 
             <a href="index.html" class="logo">
                 <ion-icon name="barbell-sharp" aria-hidden="true"></ion-icon>
-                <span class="span">FitLifes!GO¡</span>
-            </a>
+                <span class="span" style="color: #ff0000;">FitLifes!GO¡</span> </a>
 
             <nav class="navbar" data-navbar>
                 <button class="nav-close-btn" aria-label="cerrar menú" data-nav-toggler>
@@ -224,12 +234,11 @@
                     <li><a href="#" class="navbar-link">Blog</a></li>     
                     <li><a href="#" class="navbar-link" id="show-contact-modal">Contacto</a></li>
                     
-                    <li class="nav-logged-in-only"><a href="#" class="navbar-link active">Mi Cuenta</a></li>
-                    <li class="nav-logged-in-only"><a href="#" class="btn btn-secondary" id="logout-btn">Cerrar Sesión</a></li>
+                    <li><a href="#" class="btn btn-secondary" id="logout-btn" style="background-color: #ff0000;">Cerrar Sesión</a></li>
                 </ul>
             </nav>
 
-            <a href="#" class="btn btn-secondary nav-logged-in-only" id="logout-btn-header">Cerrar Sesión</a>
+            <a href="#" class="btn btn-secondary" id="logout-btn-header" style="background-color: #ff0000;">Cerrar Sesión</a>
 
             <button class="nav-open-btn" aria-label="abrir menú" data-nav-toggler>
                 <span class="line"></span>
@@ -244,50 +253,140 @@
         <article>
             <section id="dashboard-section" aria-label="Mi Cuenta">
                 <div class="dashboard-container">
-                    <h1 class="dashboard-title">Dashboard de Progreso</h1>
-                    <p class="welcome-subtitle">Bienvenido, <span id="dash-username">Miembro</span>. ¡Aquí están tus estadísticas de entrenamiento!</p>
+                    <p class="dashboard-subtitle">Dashboard</p>
+                    <h1 class="dashboard-title">Mi Dashboard de Progreso</h1>
+                    <p class="welcome-subtitle">Bienvenido, <span id="dash-username">Miembro</span>. ¡Monitorea tu evolución con FitLifes!GO¡</p>
                     
+                    <h2 class="dashboard-section-title">Estadísticas Clave de Hoy</h2>
                     <div class="stats-grid">
                         
                         <div class="stat-card">
-                            <h3>Progreso Semanal 💪</h3>
+                            <h3>Sesiones Semanales</h3>
                             <div class="progress-circle" id="circle-progress" style="--progress: 0%;">
-                                <span class="progress-value">--/5</span>
+                                <span class="progress-value">--%</span>
                             </div>
-                            <p class="stat-label">Objetivo de entrenamiento</p>
-                            <p class="stat-data" id="data-progress">0 de 5 sesiones completadas</p>
+                            <div class="stat-footer">
+                                <div class="stat-info">
+                                    <span id="data-progress-value">--/5</span>
+                                    <small>Sesiones</small>
+                                </div>
+                                <div class="stat-info">
+                                    <span id="data-progress-meta">5</span>
+                                    <small>Meta</small>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="stat-card">
-                            <h3>Quema de Calorías 🔥</h3>
+                            <h3>Calorías Quemadas</h3>
                             <div class="progress-circle" id="circle-calories" style="--progress: 0%;">
-                                <span class="progress-value">--</span>
+                                <span class="progress-value">--%</span>
                             </div>
-                            <p class="stat-label">Kcal. quemadas hoy</p>
-                            <p class="stat-data" id="data-calories">Meta diaria: 700 Kcal.</p>
+                            <div class="stat-footer">
+                                <div class="stat-info">
+                                    <span id="data-calories-value">--</span>
+                                    <small>Kcal Hoy</small>
+                                </div>
+                                <div class="stat-info">
+                                    <span id="data-calories-meta">700</span>
+                                    <small>Meta Kcal</small>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="stat-card">
-                            <h3>Ritmo Cardíaco Prom. ❤️</h3>
+                            <h3>Ritmo Cardíaco</h3>
                             <div class="progress-circle" id="circle-bpm" style="--progress: 0%;">
                                 <span class="progress-value">--</span>
                             </div>
-                            <p class="stat-label">BPM promedio en sesión</p>
-                            <p class="stat-data" id="data-bpm">Zona óptima: 120-150 BPM</p>
+                            <div class="stat-footer">
+                                <div class="stat-info">
+                                    <span id="data-bpm-value">--</span>
+                                    <small>BPM</small>
+                                </div>
+                                <div class="stat-info">
+                                    <span id="data-bpm-meta">150</span>
+                                    <small>Máx Opt.</small>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="stat-card">
-                            <h3>Meta de Peso ⚖️</h3>
+                            <h3>Progreso de Peso</h3>
                             <div class="progress-circle" id="circle-weight" style="--progress: 0%;">
-                                <span class="progress-value">--</span>
+                                <span class="progress-value">--%</span>
                             </div>
-                            <p class="stat-label">Kg. alcanzados este mes</p>
-                            <p class="stat-data" id="data-weight">Meta de 5.0 Kg.</p>
+                            <div class="stat-footer">
+                                <div class="stat-info">
+                                    <span id="data-weight-value">--</span>
+                                    <small>Kg Logrados</small>
+                                </div>
+                                <div class="stat-info">
+                                    <span id="data-weight-meta">5.0</span>
+                                    <small>Meta Kg</small>
+                                </div>
+                            </div>
                         </div>
                         
+                        <div class="stat-card">
+                            <h3>Entrenamientos HIIT</h3>
+                            <div class="progress-circle" id="circle-hiit" style="--progress: 75%;">
+                                <span class="progress-value">75%</span>
+                            </div>
+                            <div class="stat-footer">
+                                <div class="stat-info"><span>120</span><small>Minutos</small></div>
+                                <div class="stat-info"><span>160</span><small>Objetivo</small></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Ingesta de Agua</h3>
+                            <div class="progress-circle" id="circle-water" style="--progress: 80%;">
+                                <span class="progress-value">80%</span>
+                            </div>
+                            <div class="stat-footer">
+                                <div class="stat-info"><span>2.4</span><small>Litros</small></div>
+                                <div class="stat-info"><span>3.0</span><small>Meta L</small></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Días de Descanso</h3>
+                            <div class="progress-circle" id="circle-rest" style="--progress: 50%;">
+                                <span class="progress-value">50%</span>
+                            </div>
+                            <div class="stat-footer">
+                                <div class="stat-info"><span>1</span><small>Día</small></div>
+                                <div class="stat-info"><span>2</span><small>Recomendado</small></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <h3>Fuerza (Press)</h3>
+                            <div class="progress-circle" id="circle-strength" style="--progress: 95%;">
+                                <span class="progress-value">95%</span>
+                            </div>
+                            <div class="stat-footer">
+                                <div class="stat-info"><span>95 Kg</span><small>Máximo</small></div>
+                                <div class="stat-info"><span>100 Kg</span><small>Meta</small></div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <button class="btn-simulate" id="simulate-workout-btn">Simular Sesión de Entrenamiento 🚀</button>
+
+                    <h2 class="gallery-title">Galería de Inspiración</h2>
+                    <div class="gallery-grid">
+                        <img src="./assets/images/galeria-1.jpg" alt="Entrenamiento con pesas">
+                        <img src="./assets/images/galeria-2.jpg" alt="Mujer haciendo sentadillas">
+                        <img src="./assets/images/galeria-3.jpg" alt="Levantamiento de peso muerto">
+                        <img src="./assets/images/galeria-4.jpg" alt="Clase de yoga o estiramiento">
+                        <img src="./assets/images/galeria-5.jpg" alt="Corriendo en la caminadora">
+                        <img src="./assets/images/galeria-6.jpg" alt="Entrenamiento funcional">
+                        <img src="./assets/images/galeria-7.jpg" alt="Boxeo o entrenamiento de contacto">
+                        <img src="./assets/images/galeria-8.jpg" alt="Brazos fuertes">
+                    </div>
                     
                 </div>
             </section>
@@ -311,16 +410,13 @@
                 <ion-icon name="help-circle-sharp" class="modal-icon"></ion-icon>
                 <h2 class="modal-title">¿Necesitas Ayuda?</h2>
             </div>
-            <p class="modal-body-text">
+            <p style="margin-bottom: 20px;">
                 Estamos aquí para asistirte con cualquier duda sobre rutinas, membresías o soporte técnico.
             </p>
-            <div class="contact-info-box" style="text-align: center; margin: 20px 0;">
-                <p class="info-label" style="font-weight: 500;">Contáctanos por correo electrónico:</p>
-                <a href="mailto:fitlifesgo.soporte@gmail.com" class="contact-email-link" style="color: #ff6f00; font-weight: bold;">
-                    fitlifesgo.soporte@gmail.com
-                </a>
-            </div>
-            <button class="btn btn-primary close-modal-btn" data-modal-target="contactModal">Entendido</button>
+            <a href="mailto:fitlifesgo.soporte@gmail.com" class="btn btn-primary" style="background-color: #ff0000;">
+                Contáctanos por Email
+            </a>
+            <button class="btn btn-primary close-modal-btn" data-modal-target="contactModal" style="margin-top: 10px; background-color: #444;">Cerrar</button>
         </div>
     </div>
 
@@ -331,18 +427,18 @@
                 <ion-icon name="people-sharp" class="modal-icon"></ion-icon>
                 <h2 class="modal-title">Nuestro Proyecto</h2>
             </div>
-            <p class="modal-body-text">
+            <p>
                 Somos estudiantes del **CBTis 132 Hermosillo, Sonora**. Esta página fue creada con la finalidad de
                 destacar y ayudar a gente en un futuro con este proyecto, ¡que ojalá algún día crezca más!
             </p>
-            <p style="text-align: center; margin-top: 15px; font-weight: bold; color: #ff6f00;">Equipo Creador:</p>
-            <ul style="list-style: none; padding: 0; text-align: center; font-size: 0.9rem; color: #555;">
+            <p style="text-align: center; margin-top: 15px; font-weight: bold; color: #ff0000;">Equipo Creador:</p>
+            <ul style="list-style: none; padding: 0; text-align: center; font-size: 0.9rem;">
                 <li>Jesús Abraham López Gutiérrez</li>
                 <li>Jonathan Alexis Payán Enríquez</li>
                 <li>Sebastián Terán Rubio</li>
                 <li>Jesús Ernesto Cortez Ibarra</li>
             </ul>
-            <button class="btn btn-primary close-modal-btn" data-modal-target="aboutModal">¡Genial!</button>
+            <button class="btn btn-primary close-modal-btn" data-modal-target="aboutModal" style="margin-top: 20px; background-color: #ff0000;">¡Genial!</button>
         </div>
     </div>
 
@@ -359,16 +455,12 @@
             
             // REDIRECCIÓN DE SEGURIDAD CLAVE: Si no hay usuario logueado, forzar redirección al inicio
             if (!currentUser) {
-                // Si la sesión no existe, no debería estar en esta página
                 window.location.href = 'index.html';
                 return; // Detener la ejecución del script
             }
 
-            // Función para obtener los datos del usuario (ya deben existir desde index.html)
             const getOrCreateUserData = (userEmail) => {
-                const data = JSON.parse(localStorage.getItem(`data_${userEmail}`) || 'null');
-                // Esto podría retornar null si el localStorage fue manipulado, pero la seguridad ya se hizo arriba
-                return data; 
+                return JSON.parse(localStorage.getItem(`data_${userEmail}`) || 'null');
             };
 
             // --- FUNCIONES DE UTILIDAD DE MODAL ---
@@ -400,9 +492,10 @@
             function animateChart(circleId, progressPercentage) {
                 const circle = document.getElementById(circleId);
                 if (circle) {
-                    // Usamos requestAnimationFrame para asegurar la animación
                     requestAnimationFrame(() => {
                         circle.style.setProperty('--progress', `${progressPercentage}%`);
+                        // Actualizar el valor central con el porcentaje
+                        document.querySelector(`#${circleId} .progress-value`).textContent = `${Math.round(progressPercentage)}%`;
                     });
                 }
             }
@@ -410,57 +503,59 @@
             function renderDashboard(user) {
                 const userData = getOrCreateUserData(user.email);
                 
-                // ⚠️ Manejo de datos nulos si algo sale mal con localStorage
                 if (!userData) {
-                    alert("Error al cargar datos. Vuelve a iniciar sesión.");
                     logout();
                     return;
                 }
 
-                // Actualizar nombre de usuario
                 document.getElementById('dash-username').textContent = user.name || 'Miembro';
 
                 // 1. Progreso Semanal (Sesiones) - Max 5
                 const sessionsMax = 5;
                 const sessionsProgress = Math.min(userData.sessions, sessionsMax);
                 const progressPercent = (sessionsProgress / sessionsMax) * 100;
-                document.querySelector('#circle-progress .progress-value').textContent = `${sessionsProgress}/${sessionsMax}`;
-                document.getElementById('data-progress').textContent = `${sessionsProgress} de ${sessionsMax} sesiones completadas`;
+                document.getElementById('data-progress-value').textContent = `${sessionsProgress}/${sessionsMax}`;
                 animateChart('circle-progress', progressPercent);
 
                 // 2. Calorías (Meta 700 Kcal)
                 const caloriesGoal = 700;
                 const caloriesProgress = userData.calories;
                 const caloriesPercent = Math.min((caloriesProgress / caloriesGoal) * 100, 100);
-                document.querySelector('#circle-calories .progress-value').textContent = `${caloriesProgress}`;
-                const remainingCalories = Math.max(0, caloriesGoal - caloriesProgress);
-                document.getElementById('data-calories').textContent = `Meta diaria: ${caloriesGoal} Kcal. | Faltan: ${remainingCalories} Kcal.`;
+                document.getElementById('data-calories-value').textContent = `${caloriesProgress}`;
                 animateChart('circle-calories', caloriesPercent);
                 
-                // 3. Ritmo Cardíaco (Promedio)
+                // 3. Ritmo Cardíaco (Promedio) - BPM
                 const bpmMax = 150;
                 const bpmProgress = userData.bpm;
-                // El porcentaje se calcula en base al máximo de la zona óptima
-                const bpmPercent = Math.min((bpmProgress / bpmMax) * 100, 100); 
+                // El BPM no es un porcentaje de meta, lo mostramos como valor puro
                 document.querySelector('#circle-bpm .progress-value').textContent = `${bpmProgress}`;
-                document.getElementById('data-bpm').textContent = `Zona óptima: 120-150 BPM`;
-                animateChart('circle-bpm', bpmPercent);
+                document.getElementById('data-bpm-value').textContent = `${bpmProgress}`;
+                // Animamos el círculo basándonos en la zona óptima (120-150)
+                const bpmRelativePercent = Math.min(Math.max(0, bpmProgress - 100) / (bpmMax - 100) * 100, 100); 
+                animateChart('circle-bpm', bpmRelativePercent); 
                 
                 // 4. Peso (Meta de 5 Kg)
                 const weightGoal = 5;
                 const weightProgress = parseFloat(userData.weight);
-                const weightRemaining = Math.max(0, weightGoal - weightProgress);
                 const weightPercent = Math.min((weightProgress / weightGoal) * 100, 100);
-
-                document.querySelector('#circle-weight .progress-value').textContent = `${weightProgress.toFixed(1)} Kg.`;
-                document.getElementById('data-weight').textContent = `Meta: ${weightGoal} Kg. | Faltan ${weightRemaining.toFixed(1)} Kg.`;
+                document.getElementById('data-weight-value').textContent = `${weightProgress.toFixed(1)}`;
                 animateChart('circle-weight', weightPercent);
+
+                // Tarjetas de ejemplo que no cambian (mantener la simulación visual)
+                document.getElementById('circle-hiit').style.setProperty('--progress', `75%`);
+                document.querySelector('#circle-hiit .progress-value').textContent = '75%';
+                document.getElementById('circle-water').style.setProperty('--progress', `80%`);
+                document.querySelector('#circle-water .progress-value').textContent = '80%';
+                document.getElementById('circle-rest').style.setProperty('--progress', `50%`);
+                document.querySelector('#circle-rest .progress-value').textContent = '50%';
+                document.getElementById('circle-strength').style.setProperty('--progress', `95%`);
+                document.querySelector('#circle-strength .progress-value').textContent = '95%';
             }
             
             function simulateWorkout(userEmail) {
                 const userData = getOrCreateUserData(userEmail);
 
-                // Aumentar datos simulados de forma realista
+                // Aumentar datos simulados
                 userData.sessions = Math.min(userData.sessions + 1, 5); 
                 userData.calories += Math.floor(Math.random() * (350 - 200 + 1) + 200);
                 userData.bpm = Math.floor(Math.random() * (145 - 130 + 1) + 130);  
@@ -468,20 +563,17 @@
 
                 localStorage.setItem(`data_${userEmail}`, JSON.stringify(userData));
                 
-                // Forzar la re-renderización para mostrar nuevos datos y animaciones
                 renderDashboard(currentUser);  
                 alert('¡Sesión registrada! Datos actualizados.');
             }
 
             function logout() {
-                // Borrar la sesión y redirigir al inicio (index.html)
                 sessionStorage.removeItem('fitlifesgo_session');
                 window.location.href = 'index.html'; 
             }
             
             // --- CONFIGURACIÓN DE EVENT LISTENERS ---
 
-            // Botones de CERRAR SESIÓN (header y nav)
             document.querySelectorAll('#logout-btn, #logout-btn-header').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -489,12 +581,10 @@
                 });
             });
 
-            // Botón de Simulación de Entrenamiento
             document.getElementById('simulate-workout-btn').addEventListener('click', () => {
                 simulateWorkout(currentUser.email);
             });
             
-            // Asignar eventos de cierre de modales
             document.querySelectorAll('.custom-modal-close-btn, .close-modal-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -511,7 +601,6 @@
                 });
             });
             
-            // Modales de información
             document.getElementById('show-contact-modal').addEventListener('click', (e) => { e.preventDefault(); showModal('contactModal'); });
             document.getElementById('show-about-modal').addEventListener('click', (e) => { e.preventDefault(); showModal('aboutModal'); });
 
