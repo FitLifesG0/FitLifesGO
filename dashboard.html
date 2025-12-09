@@ -17,19 +17,80 @@
         rel="stylesheet">
     
     <style>
-        /* --- HEADER Y NAVEGACIÓN (Barra Negra) --- */
+        /* --- CORRECCIÓN DE MODALES (Asegurar que estén ocultos) --- */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none; /* CLAVE: Ocultar por defecto */
+            justify-content: center; 
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-modal-overlay.is-open { opacity: 1; display: flex; }
+
+        .custom-modal-content {
+            background-color: #222; 
+            color: #fff;
+            padding: 30px; border-radius: 12px; width: 90%; max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            position: relative; transform: translateY(-50px);
+            opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .custom-modal-content.slide-in {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .custom-modal-close-btn { 
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #fff;
+        }
+        
+        .modal-header { border-bottom: 2px solid #ff0000; padding-bottom: 10px; margin-bottom: 20px;}
+        .modal-icon { color: #ff0000; font-size: 2.5rem; margin-right: 15px; }
+        .modal-title { color: #fff; font-size: 2rem; }
+        .btn-primary { 
+            background-color: #ff0000; 
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* --- CORRECCIÓN DE HEADER (Asegurar tamaño y fondo) --- */
         .header {
             background-color: #000; /* Barra negra sólida */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            padding: 15px 0; /* Espaciado más compacto */
         }
-
-        .header .logo .span {
-            /* Separamos FitLifes (blanco) de !GO¡ (rojo) */
-            font-weight: 800;
+        
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .header .logo {
-            color: #fff; /* Icono y FitLifes en blanco por defecto */
+            color: #fff;
+            font-size: 2rem; /* Tamaño de fuente para el logo */
         }
         
         .header .logo .red-accent {
@@ -37,21 +98,20 @@
         }
 
         .navbar-list .navbar-link {
-            color: #fff; /* Links en blanco por defecto */
+            color: #fff; 
             font-weight: 500;
         }
 
         .navbar-list .navbar-link:hover,
         .navbar-list .navbar-link.active {
-            color: #ff0000; /* Link activo o hover en rojo */
+            color: #ff0000; 
         }
 
-        /* Botón de Cerrar Sesión Minimalista (Rojo) */
         .btn-secondary {
             background-color: transparent;
             color: #ff0000;
             border: 1px solid #ff0000;
-            padding: 8px 15px; /* Más pequeño */
+            padding: 8px 15px; 
             font-size: 0.9rem;
             border-radius: 4px;
             transition: all 0.2s;
@@ -61,12 +121,11 @@
             color: #fff;
         }
 
-        /* Ocultar el botón duplicado de Cerrar Sesión en la barra */
         #logout-btn-header {
             display: none !important; 
         }
 
-        /* --- CUERPO DEL DASHBOARD (Gris Claro) --- */
+        /* --- CUERPO Y GRÁFICOS (Minimalista) --- */
         #dashboard-section {
             min-height: 100vh;
             padding: 100px 50px 50px; 
@@ -79,16 +138,15 @@
         .dashboard-title { font-size: 3.5rem; margin-bottom: 5px; color: #ff0000; font-weight: 800; }
         .welcome-subtitle { font-size: 1rem; margin-bottom: 40px; color: #777; }
 
-        /* --- Grid de Estadísticas Simplificada --- */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 4 en línea */
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 25px;
             margin-bottom: 50px;
         }
 
         .stat-card {
-            background: #fff; /* Fondo Blanco */
+            background: #fff; 
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -104,41 +162,36 @@
             font-weight: 700;
         }
 
-        /* --- Gráfico Circular Minimalista con Animación --- */
         .progress-circle {
-            width: 120px; /* Tamaño más pequeño */
+            width: 120px; 
             height: 120px; 
             border-radius: 50%;
             margin: 10px auto;
             position: relative;
-            background: #f0f0f0; /* Fondo gris claro */
+            background: #f0f0f0; 
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Sutil sombra interna */
-            /* Agregamos la animación de giro inicial */
-            animation: fadeIn 0.5s ease-out;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
         }
 
-        /* El relleno (progreso) será inyectado por JS/CSS en el pseudoelemento */
         .progress-fill {
             position: absolute;
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            /* Propiedad CSS para la animación del arco */
             --progress-degree: 0deg; 
             background: conic-gradient(
                 #ff0000 var(--progress-degree), 
                 #f0f0f0 var(--progress-degree)
             );
-            transition: background 1s ease-out; /* Transición suave al actualizar */
+            transition: background 1s ease-out; 
         }
         
         .progress-circle::after {
             content: '';
             position: absolute;
-            width: 105px; /* Centro blanco para el efecto de dona */
+            width: 105px; 
             height: 105px;
             border-radius: 50%;
             background: #fff; 
@@ -149,13 +202,10 @@
             z-index: 2;
             font-size: 1.8rem; 
             font-weight: 800;
-            color: #333; /* El porcentaje en negro */
+            color: #333; 
         }
 
-        /* --- Contenedor de datos (Abajo del círculo) --- */
-        .stat-footer {
-            margin-top: 15px;
-        }
+        .stat-footer { margin-top: 15px; }
 
         .stat-info span {
             display: block;
@@ -186,20 +236,10 @@
             background-color: #cc0000;
         }
 
-        /* Ocultar la galería y el título de galería */
+        /* Ocultar la galería y su título (Confirmando la eliminación) */
         .gallery-title, .gallery-grid {
             display: none !important;
         }
-
-        /* Estilos de Modales (Ajuste de color a Rojo/Oscuro) */
-        .custom-modal-overlay { background-color: rgba(0, 0, 0, 0.9); }
-        .custom-modal-content { background-color: #222; color: #fff; }
-        .custom-modal-close-btn { color: #fff; }
-        .modal-header { border-bottom: 2px solid #ff0000; }
-        .modal-icon { color: #ff0000; }
-        .modal-title { color: #fff; }
-        
-        .modal-body-text a { color: #ff0000; }
     </style>
 </head>
 
@@ -309,9 +349,6 @@
                     </div>
 
                     <button class="btn-simulate" id="simulate-workout-btn">Simular Nueva Sesión 🚀</button>
-
-                    <h2 class="gallery-title">Galería de Inspiración</h2>
-                    <div class="gallery-grid"></div>
                     
                 </div>
             </section>
@@ -335,7 +372,7 @@
                 <ion-icon name="help-circle-sharp" class="modal-icon"></ion-icon>
                 <h2 class="modal-title">¿Necesitas Ayuda?</h2>
             </div>
-            <p class="modal-body-text" style="margin-bottom: 20px;">
+            <p style="margin-bottom: 20px;">
                 Estamos aquí para asistirte con cualquier duda sobre rutinas, membresías o soporte técnico.
             </p>
             <a href="mailto:fitlifesgo.soporte@gmail.com" class="btn btn-primary" style="background-color: #ff0000;">
@@ -388,6 +425,42 @@
                 return JSON.parse(localStorage.getItem(`data_${userEmail}`) || 'null');
             };
 
+            // --- FUNCIONES DE MODALES CORREGIDAS ---
+            function showModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                    setTimeout(() => {
+                        modal.classList.add('is-open');
+                        modal.querySelector('.custom-modal-content').classList.add('slide-in');
+                    }, 10);
+                }
+            }
+
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.remove('is-open');
+                    modal.querySelector('.custom-modal-content').classList.remove('slide-in');
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                    }, 300);
+                }
+            }
+            
+            function setupModal(modalId) {
+                const modal = document.getElementById(modalId);
+                const closeBtns = modal.querySelectorAll('.custom-modal-close-btn, .close-modal-btn');
+                
+                closeBtns.forEach(btn => btn.addEventListener('click', () => closeModal(modalId)));
+                modal.addEventListener('click', (e) => { 
+                    if (e.target === modal) closeModal(modalId); 
+                });
+            }
+
+            setupModal('contactModal');
+            setupModal('aboutModal');
+
             // --- FUNCIONES DE GRÁFICOS Y DATOS ---
 
             function animateChart(circleId, progressPercentage) {
@@ -395,13 +468,15 @@
                 const progressValue = document.querySelector(`#${circleId} .progress-value`);
                 
                 if (circleFill) {
-                    // Convertir porcentaje (0-100) a grados (0-360)
                     const degree = (progressPercentage / 100) * 360; 
                     
-                    // Aplicar el nuevo estilo para la animación
                     requestAnimationFrame(() => {
                         circleFill.style.setProperty('--progress-degree', `${degree}deg`);
-                        progressValue.textContent = `${Math.round(progressPercentage)}%`;
+                        
+                        // Si no es el BPM, muestra el porcentaje. El BPM ya tiene su valor puro en renderDashboard.
+                        if (circleId !== 'circle-bpm') {
+                             progressValue.textContent = `${Math.round(progressPercentage)}%`;
+                        }
                     });
                 }
             }
@@ -416,30 +491,29 @@
 
                 document.getElementById('dash-username').textContent = user.name || 'Miembro';
 
-                // 1. Progreso Semanal (Sesiones) - Max 5
+                // 1. Sesiones
                 const sessionsMax = 5;
                 const sessionsProgress = Math.min(userData.sessions, sessionsMax);
                 const progressPercent = (sessionsProgress / sessionsMax) * 100;
                 document.getElementById('data-sessions-value').textContent = `${sessionsProgress}/${sessionsMax}`;
                 animateChart('circle-sessions', progressPercent);
 
-                // 2. Calorías (Meta 700 Kcal)
+                // 2. Calorías
                 const caloriesGoal = 700;
                 const caloriesProgress = userData.calories;
                 const caloriesPercent = Math.min((caloriesProgress / caloriesGoal) * 100, 100);
                 document.getElementById('data-calories-value').textContent = `${caloriesProgress} Kcal.`;
                 animateChart('circle-calories', caloriesPercent);
                 
-                // 3. Ritmo Cardíaco (Promedio) - BPM - Se usa 160 como Máximo de la zona alta para la gráfica.
+                // 3. Ritmo Cardíaco
                 const bpmMaxChart = 160; 
                 const bpmProgress = userData.bpm;
                 const bpmPercent = Math.min((bpmProgress / bpmMaxChart) * 100, 100);
                 document.getElementById('data-bpm-value').textContent = `${bpmProgress} BPM`;
-                // El porcentaje del valor no se muestra en el centro, sino el valor puro
                 document.querySelector('#circle-bpm .progress-value').textContent = `${bpmProgress}`; 
                 animateChart('circle-bpm', bpmPercent);
                 
-                // 4. Peso (Meta de 5 Kg)
+                // 4. Peso
                 const weightGoal = 5;
                 const weightProgress = parseFloat(userData.weight);
                 const weightPercent = Math.min((weightProgress / weightGoal) * 100, 100);
@@ -479,18 +553,6 @@
                 simulateWorkout(currentUser.email);
             });
             
-            // Lógica de modales (mantengo la funcionalidad simplificada)
-            function setupModal(modalId) {
-                const modal = document.getElementById(modalId);
-                const closeBtns = modal.querySelectorAll('.custom-modal-close-btn, .close-modal-btn');
-                
-                closeBtns.forEach(btn => btn.addEventListener('click', () => closeModal(modalId)));
-                modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modalId); });
-            }
-
-            setupModal('contactModal');
-            setupModal('aboutModal');
-
             document.getElementById('show-contact-modal').addEventListener('click', (e) => { e.preventDefault(); showModal('contactModal'); });
             document.getElementById('show-about-modal').addEventListener('click', (e) => { e.preventDefault(); showModal('aboutModal'); });
 
