@@ -1,130 +1,376 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FitLifes!GO - Dashboard</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FitLifes!GO - Web Completa de Fitness</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-    }
-    /* Header */
-    header {
-      background: #121212;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom-left-radius: 30px;
-      border-bottom-right-radius: 30px;
-    }
-    .logo {
-      color: #fff;
-      font-size: 26px;
-      font-weight: bold;
-    }
-    .logo span {
-      color: #ff2d2d;
-    }
+    :root{--accent:#ff2d2d;--dark:#121212;--muted:#666}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;background:#f4f6f8;color:#111}
 
-    nav a {
-      color: #ffffffcc;
-      margin: 0 15px;
-      text-decoration: none;
-      font-size: 15px;
-    }
-    nav a:hover {
-      color: #fff;
-    }
+    header{background:var(--dark);color:#fff;padding:18px 28px;border-bottom-left-radius:28px;border-bottom-right-radius:28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700}
+    .brand .logo{background:var(--accent);padding:6px 10px;border-radius:6px}
+    nav{display:flex;gap:14px}
+    nav a{color:#ddd;text-decoration:none;font-weight:600}
+    .cta{background:var(--accent);color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-weight:700}
 
-    .btn {
-      background: #ff2d2d;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-    }
+    main{padding:28px;max-width:1100px;margin:18px auto}
+    .hero{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start}
+    .hero-card{background:#fff;border-radius:12px;padding:22px;box-shadow:0 6px 18px rgba(20,20,20,0.06)}
+    h1{color:var(--accent);margin:0 0 8px}
+    p.lead{margin:0;color:var(--muted)}
 
-    /* Main Content */
-    .container {
-      padding: 40px;
-    }
-    h1 {
-      color: #d62828;
-      margin-bottom: 0px;
-    }
-    .subtitle {
-      color: #555;
-      margin-bottom: 30px;
-    }
+    /* Quick stats */
+    .stats{display:flex;gap:12px;margin-top:16px}
+    .stat{flex:1;background:#111;color:#fff;padding:12px;border-radius:8px;text-align:center}
+    .stat h3{margin:0;font-size:22px}
+    .stat p{margin:4px 0 0;font-size:13px;color:#ddd}
 
-    /* Cards */
-    .cards {
-      display: flex;
-      gap: 25px;
-    }
-    .card {
-      background: #1a1a1a;
-      padding: 25px;
-      border-radius: 12px;
-      width: 220px;
-      color: #fff;
-      text-align: center;
-    }
-    .progress-circle {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 12px solid #ff2d2d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 10px auto;
-      font-size: 24px;
-      font-weight: bold;
-    }
+    /* Workouts */
+    .section{margin-top:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .workout{background:#fff;border-radius:10px;padding:14px;box-shadow:0 6px 14px rgba(20,20,20,0.04);display:flex;flex-direction:column;gap:8px}
+    .tags{display:flex;gap:8px}
+    .tag{background:#efefef;padding:6px 8px;border-radius:6px;font-size:12px}
 
-    .card small {
-      display: block;
-      opacity: 0.7;
-      font-size: 12px;
-    }
+    /* Sidebar controls */
+    .sidebar{display:flex;flex-direction:column;gap:12px}
+    .card{background:#fff;padding:14px;border-radius:10px;box-shadow:0 6px 14px rgba(20,20,20,0.04)}
+    label{display:block;font-size:13px;margin-bottom:6px}
+    input,select,button,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd}
+    button.primary{background:var(--accent);color:#fff;border:0;padding:10px 12px;cursor:pointer}
+
+    /* Progress circles */
+    .progress-wrap{display:flex;gap:12px;align-items:center}
+    .circle{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 50% 50%, #fff 60%, #fff0);position:relative}
+    svg{position:absolute;top:0;left:0}
+    .pc-label{font-weight:700}
+
+    footer{padding:20px;text-align:center;color:#777}
+
+    /* Responsive */
+    @media (max-width:880px){.hero{grid-template-columns:1fr}.sidebar{order:2}}
+
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">FitLifes!<span>GO!</span></div>
+    <div class="brand"><div class="logo">FLG</div><div>
+      <div style="font-weight:800">FitLifes!GO</div>
+      <div style="font-size:12px;color:#bbb">Tu compañero de fitness</div>
+    </div></div>
     <nav>
-      <a href="#">Inicio</a>
-      <a href="#">Nosotros</a>
-      <a href="#">Certificaciones</a>
-      <a href="#">Logros</a>
+      <a href="#programas">Programas</a>
+      <a href="#calculadoras">Calculadoras</a>
+      <a href="#contacto">Contacto</a>
+      <a class="cta" href="#plan">Empezar</a>
     </nav>
-    <a href="#" class="btn">Contactar</a>
   </header>
 
-  <div class="container">
-    <p>Dashboard</p>
-    <h1>Mi Dashboard de Progress</h1>
-    <p class="subtitle">Welcome subtitle</p>
-    <p>Dashbas section</p>
+  <main>
+    <section class="hero">
+      <div>
+        <div class="hero-card">
+          <p style="margin:0">Dashboard</p>
+          <h1>Mi Dashboard de Progress</h1>
+          <p class="lead">Bienvenido. Lleva el registro de entrenamientos, calcula tu IMC y crea rutinas. Todo funcionando en tu navegador.</p>
 
-    <div class="cards">
-      <div class="card">
-        <div class="progress-circle">43%</div>
-        <small>Meta: 0/5</small>
-        <small>Progreso Total: 0/100</small>
+          <div class="stats" aria-hidden>
+            <div class="stat">
+              <h3 id="total-workouts">0</h3>
+              <p>Entrenamientos añadidos</p>
+            </div>
+            <div class="stat">
+              <h3 id="completed-workouts">0</h3>
+              <p>Entrenamientos completados</p>
+            </div>
+            <div class="stat">
+              <h3 id="progress-percent">0%</h3>
+              <p>Progreso general</p>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+            <div class="card" style="flex:1">
+              <label for="new-workout">Crear nuevo entrenamiento</label>
+              <input id="new-workout" placeholder="Nombre (ej: Piernas explosivas)" />
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <input id="duration" placeholder="Duración (min)" type="number" />
+                <select id="level"><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option></select>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button class="primary" id="addWorkout">Añadir</button>
+                <button id="resetData">Reset</button>
+              </div>
+            </div>
+
+            <div class="card sidebar">
+              <div>
+                <label>Temporizador (segundos)</label>
+                <input id="timer-seconds" type="number" placeholder="60" />
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button id="startTimer" class="primary">Iniciar</button>
+                  <button id="stopTimer">Detener</button>
+                </div>
+                <div style="margin-top:8px;font-weight:700" id="timer-display">00:00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Entrenamientos</h2>
+          <p class="lead">Agrega rutinas, márcalas como completadas y verás cómo avanza tu progreso.</p>
+
+          <div id="workoutsList" class="grid" aria-live="polite"></div>
+        </div>
+
       </div>
 
-      <div class="card">
-        <div class="progress-circle">20%</div>
-        <small>Meta: 0/5</small>
-        <small>Progreso Total: 0/100</small>
+      <aside style="width:360px">
+        <div class="card">
+          <h3>Progreso</h3>
+          <div style="display:flex;gap:12px;margin-top:10px" class="progress-wrap">
+            <div class="circle" aria-hidden>
+              <svg width="96" height="96" viewBox="0 0 36 36">
+                <path stroke="#eee" stroke-width="3.5" fill="none" d="M18 2.0845a15.9155 15.9155 0 1 0 0 31.831 15.9155 15.9155 0 1 0 0-31.831"/>
+                <path id="progressPath" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845a15.9155 15.9155 0 1 0 0 31.831 15.9155 15.9155 0 1 0 0-31.831" stroke-dasharray="0 100"/>
+              </svg>
+              <div class="pc-label" id="pcLabel">0%</div>
+            </div>
+
+            <div style="flex:1">
+              <p style="margin:0 0 6px">IMC (Índice de masa corporal)</p>
+              <label for="peso">Peso (kg)</label>
+              <input id="peso" placeholder="70" type="number" />
+              <label for="altura">Altura (cm)</label>
+              <input id="altura" placeholder="175" type="number" />
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button id="calcBMI" class="primary">Calcular IMC</button>
+                <button id="clearBMI">Limpiar</button>
+              </div>
+              <div id="bmiResult" style="margin-top:10px;font-weight:700"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h3 id="plan">Contacto</h3>
+          <form id="contactForm">
+            <label for="name">Nombre</label>
+            <input id="name" required />
+            <label for="message">Mensaje</label>
+            <textarea id="message" rows="4" required></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="primary" type="submit">Enviar</button>
+              <button type="button" id="clearContact">Limpiar</button>
+            </div>
+            <div id="contactFeedback" style="margin-top:8px;color:green;font-weight:700"></div>
+          </form>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="calculadoras">
+      <h2>Calculadoras rápidas</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Calorías estimadas</h3>
+          <label for="age">Edad</label><input id="age" type="number" />
+          <label for="gender">Género</label>
+          <select id="gender"><option value="male">Hombre</option><option value="female">Mujer</option></select>
+          <label for="height2">Altura (cm)</label><input id="height2" type="number" />
+          <label for="weight2">Peso (kg)</label><input id="weight2" type="number" />
+          <label for="activity">Actividad</label>
+          <select id="activity"><option value="1.2">Sedentario</option><option value="1.375">Ligero</option><option value="1.55">Moderado</option><option value="1.725">Activo</option></select>
+          <button id="calcCalories" class="primary" style="margin-top:8px">Calcular</button>
+          <div id="calResult" style="margin-top:10px;font-weight:700"></div>
+        </div>
+
+        <div class="card">
+          <h3>Conversor de unidades</h3>
+          <label for="km">Km</label><input id="km" type="number" />
+          <button id="toMiles">Convertir a millas</button>
+          <div id="mileResult" style="margin-top:10px;font-weight:700"></div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <small>FitLifes!GO — Prototipo totalmente funcional en el navegador • Datos guardados localmente</small>
+  </footer>
+
+  <script>
+    // STORAGE KEYS
+    const KEY = 'flg_workouts_v1';
+
+    // Helpers
+    const \$ = sel => document.querySelector(sel);
+    const \$all = sel => Array.from(document.querySelectorAll(sel));
+
+    // Initial load
+    function loadWorkouts(){
+      const raw = localStorage.getItem(KEY);
+      return raw ? JSON.parse(raw) : [];
+    }
+    function saveWorkouts(list){
+      localStorage.setItem(KEY, JSON.stringify(list));
+      renderWorkouts();
+    }
+
+    // Render
+    function renderWorkouts(){
+      const list = loadWorkouts();
+      const container = $('#workoutsList');
+      container.innerHTML = '';
+      list.forEach((w, idx) => {
+        const el = document.createElement('div');
+        el.className = 'workout';
+        el.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>${escapeHtml(w.name)}</strong>
+            <small>${w.level} • ${w.duration}m</small>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+            <div class="tag">${w.status}</div>
+            <div class="tag">Añadido: ${new Date(w.added).toLocaleDateString()}</div>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button data-idx="${idx}" class="startBtn">Iniciar</button>
+            <button data-idx="${idx}" class="completeBtn">Marcar completo</button>
+            <button data-idx="${idx}" class="deleteBtn">Eliminar</button>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+
+      $('#total-workouts').textContent = list.length;
+      $('#completed-workouts').textContent = list.filter(w=>w.status==='completed').length;
+      const percent = list.length? Math.round((list.filter(w=>w.status==='completed').length / list.length)*100) : 0;
+      $('#progress-percent').textContent = percent + '%';
+      setProgressCircle(percent);
+    }
+
+    function setProgressCircle(p){
+      const path = document.getElementById('progressPath');
+      const label = document.getElementById('pcLabel');
+      const dash = (p/100) * 100; // stroke-dasharray percent
+      path.setAttribute('stroke-dasharray', dash + ' 100');
+      label.textContent = p + '%';
+    }
+
+    // Safe text
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;" }[c]));
+    }
+
+    // Add workout
+    $('#addWorkout').addEventListener('click', ()=>{
+      const name = $('#new-workout').value.trim();
+      const duration = parseInt($('#duration').value) || 20;
+      const level = $('#level').value;
+      if(!name){ alert('Escribe un nombre para el entrenamiento'); return; }
+      const list = loadWorkouts();
+      list.push({name, duration, level, added: Date.now(), status: 'pending'});
+      saveWorkouts(list);
+      $('#new-workout').value=''; $('#duration').value='';
+    });
+
+    // Delegated events for workout actions
+    document.addEventListener('click', e=>{
+      if(e.target.matches('.completeBtn')){
+        const i = +e.target.dataset.idx; const list = loadWorkouts(); list[i].status='completed'; saveWorkouts(list);
+      }
+      if(e.target.matches('.deleteBtn')){
+        const i = +e.target.dataset.idx; const list = loadWorkouts(); list.splice(i,1); saveWorkouts(list);
+      }
+      if(e.target.matches('.startBtn')){
+        const i = +e.target.dataset.idx; const list = loadWorkouts(); startWorkoutSimulation(list[i]);
+      }
+    });
+
+    // Simple workout runner (opens modal-like prompt and marks completed when confirmed)
+    function startWorkoutSimulation(w){
+      if(!confirm(`Iniciar entrenamiento: ${w.name} (${w.duration} min) ?`)) return;
+      alert('Temporizador interno iniciará ahora. Cuando termines, marca como completado.');
+    }
+
+    // Reset
+    $('#resetData').addEventListener('click', ()=>{
+      if(confirm('Borrar todos los entrenamientos y datos locales?')){ localStorage.removeItem(KEY); renderWorkouts(); }
+    });
+
+    // TIMER
+    let timerInterval=null; let remaining=0;
+    function formatTime(s){ const m=Math.floor(s/60).toString().padStart(2,'0'); const sec=(s%60).toString().padStart(2,'0'); return m+':'+sec; }
+    $('#startTimer').addEventListener('click', ()=>{
+      const sec = parseInt($('#timer-seconds').value) || 60; if(sec<=0) return alert('Introduce segundos válidos');
+      remaining = sec; $('#timer-display').textContent = formatTime(remaining);
+      if(timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(()=>{
+        remaining--; $('#timer-display').textContent = formatTime(remaining);
+        if(remaining<=0){ clearInterval(timerInterval); timerInterval=null; alert('¡Tiempo terminado!'); }
+      },1000);
+    });
+    $('#stopTimer').addEventListener('click', ()=>{ if(timerInterval) clearInterval(timerInterval); timerInterval=null; $('#timer-display').textContent = '00:00'; });
+
+    // BMI
+    $('#calcBMI').addEventListener('click', ()=>{
+      const peso = parseFloat($('#peso').value);
+      const altura = parseFloat($('#altura').value);
+      if(!peso || !altura) return alert('Introduce peso y altura válidos');
+      const m = altura/100; const bmi = +(peso/(m*m));
+      let cat='';
+      if(bmi<18.5) cat='Bajo peso'; else if(bmi<25) cat='Normal'; else if(bmi<30) cat='Sobrepeso'; else cat='Obesidad';
+      $('#bmiResult').textContent = `IMC: ${bmi.toFixed(1)} — ${cat}`;
+    });
+    $('#clearBMI').addEventListener('click', ()=>{ $('#peso').value=''; $('#altura').value=''; $('#bmiResult').textContent=''; });
+
+    // Contact form
+    $('#contactForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const name=$('#name').value.trim(); const msg=$('#message').value.trim();
+      if(!name||!msg){ alert('Completa los campos'); return; }
+      // Simula envío guardando en localStorage
+      const messages = JSON.parse(localStorage.getItem('flg_messages')||'[]');
+      messages.push({name, msg, at:Date.now()});
+      localStorage.setItem('flg_messages', JSON.stringify(messages));
+      $('#contactFeedback').textContent = 'Mensaje enviado — gracias!';
+      $('#contactForm').reset();
+      setTimeout(()=>$('#contactFeedback').textContent='',2500);
+    });
+    $('#clearContact').addEventListener('click', ()=>$('#contactForm').reset());
+
+    // CALORÍAS
+    $('#calcCalories').addEventListener('click', ()=>{
+      const age = parseInt($('#age').value)||30; const height = parseFloat($('#height2').value)||170; const weight = parseFloat($('#weight2').value)||70; const activity = parseFloat($('#activity').value)||1.2; const gender = $('#gender').value;
+      // Mifflin-St Jeor
+      let bmr = gender==='male' ? (10*weight + 6.25*height - 5*age + 5) : (10*weight + 6.25*height - 5*age -161);
+      const tdee = Math.round(bmr*activity);
+      $('#calResult').textContent = `TDEE estimado: ${tdee} kcal/día`;
+    });
+
+    // KM -> miles
+    $('#toMiles').addEventListener('click', ()=>{
+      const km = parseFloat($('#km').value)||0; const mi = (km*0.621371).toFixed(2);
+      $('#mileResult').textContent = `${km} km = ${mi} millas`;
+    });
+
+    // Simple demo workouts seed
+    (function seed(){ if(!localStorage.getItem(KEY)){ const seedData = [
+      {name:'Full Body 30', duration:30, level:'Intermediate', added:Date.now(), status:'pending'},
+      {name:'Cardio HIIT', duration:20, level:'Advanced', added:Date.now(), status:'pending'}
+    ]; localStorage.setItem(KEY, JSON.stringify(seedData)); }
+      renderWorkouts();
+    })();
+
+    // Accessibility: keyboard escape stops timer
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && timerInterval){ clearInterval(timerInterval); timerInterval=null; $('#timer-display').textContent='00:00'; }});
+
+  </script>
 </body>
 </html>
