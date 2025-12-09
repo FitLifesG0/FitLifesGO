@@ -1,1 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitLifes!GO¡ - Transforma tu Vida Fitness</title>
 
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+
+    <link rel="stylesheet" href="./assets/css/style.css"> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@600;700;800;900&family=Rubik:wght@400;500;800&display=swap" rel="stylesheet">
+
+    <link rel="preload" as="image" href="./assets/images/hero-banner.png">
+    
+    <style>
+        /* Estilos de Modales compartidos - Mismos que la versión anterior */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-modal-overlay.is-open { opacity: 1; display: flex; }
+
+        .custom-modal-content {
+            background-color: #ffffff; /* Fondo claro para el modal */
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            color: #333;
+        }
+
+        .custom-modal-content.slide-in {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .custom-modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff6f00; /* Naranja de marca */
+            padding-bottom: 10px;
+        }
+
+        .modal-icon { font-size: 2.5rem; color: #ff6f00; margin-right: 15px; }
+        .modal-title { font-size: 2rem; color: #000; margin: 0; }
+        .auth-form input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 15px;
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .form-message { margin-top: 10px; padding: 10px; border-radius: 4px; text-align: center; font-weight: 500; }
+        .form-message.error { background-color: #f8d7da; color: #721c24; }
+        .form-message.success { background-color: #d4edda; color: #155724; }
+        .auth-toggle-link { text-align: center; margin-top: 15px; font-size: 0.95rem; }
+        .auth-toggle-link a { color: #ff6f00; text-decoration: none; font-weight: bold; }
+        .auth-toggle-link a:hover { text-decoration: underline; }
+
+        /* Estilos de Botones */
+        .btn-primary { 
+            background-color: #ff6f00; 
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn-primary:hover { background-color: #e65c00; }
+
+        /* Estilos del nuevo hero (opcionalmente se mueven a style.css) */
+        .hero-banner {
+            max-width: 500px;
+            margin: auto;
+            position: relative;
+        }
+        .hero-banner img { height: auto; }
+        
+    </style>
+</head>
+
+<body id="top">
+
+    <header class="header" data-header>
+        <div class="container">
+
+            <a href="index.html" class="logo">
+                <ion-icon name="barbell-sharp" aria-hidden="true"></ion-icon>
+                <span class="span">FitLifes!GO¡</span>
+            </a>
+
+            <nav class="navbar" data-navbar>
+                <button class="nav-close-btn" aria-label="cerrar menú" data-nav-toggler>
+                    <ion-icon name="close-sharp" aria-hidden="true"></ion-icon>
+                </button>
+
+                <ul class="navbar-list">
+                    <li><a href="index.html" class="navbar-link active">Inicio</a></li>
+                    <li><a href="#" class="navbar-link" id="show-about-modal">Nosotros</a></li>
+                    <li><a href="#" class="navbar-link show-auth-modal">Clases</a></li> 
+                    <li><a href="#" class="navbar-link show-auth-modal">Blog</a></li>
+                    <li><a href="#" class="navbar-link" id="show-contact-modal">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <a href="#" class="btn btn-secondary" id="open-auth-modal-header">Únete Ahora / Login</a>
+
+            <button class="nav-open-btn" aria-label="abrir menú" data-nav-toggler>
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </button>
+
+        </div>
+    </header>
+
+    <main>
+        <article>
+
+            <section class="section hero bg-dark has-after has-bg-image" id="hero" aria-label="inicio"
+                style="background-image: url('./assets/images/hero-bg.png');">
+                <div class="container">
+
+                    <div class="hero-content">
+
+                        <p class="hero-subtitle">
+                            <strong class="strong">#1</strong> EN ENTRENAMIENTO PERSONALIZADO
+                        </p>
+
+                        <h1 class="h1 hero-title">Alcanza tu **Máximo Potencial**</h1>
+
+                        <p class="section-text">
+                            Programas de élite, seguimiento de métricas avanzado y la motivación que necesitas para superar
+                            tus límites.
+                        </p>
+
+                        <a href="#" class="btn btn-primary" id="open-auth-modal-hero">Comenzar mi Transformación</a>
+
+                    </div>
+
+                    <div class="hero-banner">
+                        <img src="./assets/images/hero-banner.png" width="500" height="570" alt="Atleta entrenando"
+                            class="w-100">
+                        </div>
+
+                </div>
+            </section>
+            
+            </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="container">
+                <p class="copyright">
+                    &copy; 2025 FitLifes!GO¡. Todos los derechos reservados. | Proyecto CBTis 132
+                </p>
+            </div>
+        </div>
+    </footer>
+
+
+    <div id="contactModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <button class="custom-modal-close-btn" data-modal-target="contactModal">&times;</button>
+            <div class="modal-header">
+                <ion-icon name="help-circle-sharp" class="modal-icon"></ion-icon>
+                <h2 class="modal-title">¿Necesitas Ayuda?</h2>
+            </div>
+            <p class="modal-body-text">
+                Estamos aquí para asistirte con cualquier duda sobre rutinas, membresías o soporte técnico.
+            </p>
+            <div class="contact-info-box" style="text-align: center; margin: 20px 0;">
+                <p class="info-label" style="font-weight: 500;">Contáctanos por correo electrónico:</p>
+                <a href="mailto:fitlifesgo.soporte@gmail.com" class="contact-email-link" style="color: #ff6f00; font-weight: bold;">
+                    fitlifesgo.soporte@gmail.com
+                </a>
+            </div>
+            <button class="btn btn-primary close-modal-btn" data-modal-target="contactModal">Entendido</button>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <button class="custom-modal-close-btn" data-modal-target="aboutModal">&times;</button>
+            <div class="modal-header">
+                <ion-icon name="people-sharp" class="modal-icon"></ion-icon>
+                <h2 class="modal-title">Nuestro Proyecto</h2>
+            </div>
+            <p class="modal-body-text">
+                Somos estudiantes del **CBTis 132 Hermosillo, Sonora**. Esta página fue creada con la finalidad de
+                destacar y ayudar a gente en un futuro con este proyecto, ¡que ojalá algún día crezca más!
+            </p>
+            <p style="text-align: center; margin-top: 15px; font-weight: bold; color: #ff6f00;">Equipo Creador:</p>
+            <ul style="list-style: none; padding: 0; text-align: center; font-size: 0.9rem; color: #555;">
+                <li>Jesús Abraham López Gutiérrez</li>
+                <li>Jonathan Alexis Payán Enríquez</li>
+                <li>Sebastián Terán Rubio</li>
+                <li>Jesús Ernesto Cortez Ibarra</li>
+            </ul>
+            <button class="btn btn-primary close-modal-btn" data-modal-target="aboutModal">¡Genial!</button>
+        </div>
+    </div>
+
+    <div id="authModal" class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <button class="custom-modal-close-btn" data-modal-target="authModal">&times;</button>
+
+            <div id="register-content">
+                <div class="modal-header">
+                    <ion-icon name="person-add-sharp" class="modal-icon"></ion-icon>
+                    <h2 class="modal-title">Regístrate en FitLifes!GO¡</h2>
+                </div>
+
+                <form class="auth-form" id="register-form">
+                    <input type="text" id="reg-name" placeholder="Tu nombre completo" required>
+                    <input type="email" id="reg-email" placeholder="Correo Electrónico" required>
+                    <input type="password" id="reg-password" placeholder="Contraseña (Mínimo 6 caracteres)" minlength="6" required>
+
+                    <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+                    <p id="reg-message" class="form-message" style="display: none;"></p>
+                </form>
+
+                <p class="auth-toggle-link">
+                    ¿Ya tienes una cuenta?
+                    <a href="#" id="link-to-login">Inicia Sesión aquí</a>
+                </p>
+            </div>
+
+            <div id="login-content" style="display: none;">
+                <div class="modal-header">
+                    <ion-icon name="log-in-sharp" class="modal-icon"></ion-icon>
+                    <h2 class="modal-title">Acceso a tu Dashboard</h2>
+                </div>
+
+                <form class="auth-form" id="login-form">
+                    <input type="email" id="log-email" placeholder="Correo Electrónico" required>
+                    <input type="password" id="log-password" placeholder="Tu contraseña" required>
+
+                    <button type="submit" class="btn btn-primary">Acceder</button>
+                    <p id="login-message" class="form-message" style="display: none;"></p>
+                </form>
+
+                <p class="auth-toggle-link">
+                    ¿No tienes una cuenta?
+                    <a href="#" id="link-to-register">Regístrate ahora</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- VARIABLES GLOBALES Y ALMACENAMIENTO ---
+            const USERS_STORAGE_KEY = 'fitlifesgo_users';
+            let users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || '{}');
+            let currentUser = JSON.parse(sessionStorage.getItem('fitlifesgo_session') || 'null');
+            
+            // Si el usuario está logueado, redirigir automáticamente al dashboard
+            if (currentUser) {
+                // **CLAVE para GitHub Pages:** Redirigir si la sesión existe
+                window.location.href = 'dashboard.html'; 
+            }
+
+            // Datos simulados (se mantiene para la creación inicial de datos)
+            const getOrCreateUserData = (userEmail) => {
+                let data = JSON.parse(localStorage.getItem(`data_${userEmail}`) || 'null');
+                if (!data) {
+                    data = {
+                        sessions: 0, 
+                        calories: 0,
+                        bpm: 0, 
+                        weight: 0 
+                    };
+                    localStorage.setItem(`data_${userEmail}`, JSON.stringify(data));
+                }
+                return data;
+            };
+
+            // --- FUNCIONES DE UTILIDAD DE MODAL ---
+
+            function showMessage(elementId, message, isSuccess) {
+                const el = document.getElementById(elementId);
+                el.textContent = message;
+                el.className = `form-message ${isSuccess ? 'success' : 'error'}`;
+                el.style.display = 'block';
+                setTimeout(() => { el.style.display = 'none'; }, 5000);
+            }
+
+            function showModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.style.display = 'flex';
+                    setTimeout(() => {
+                        modal.classList.add('is-open');
+                        modal.querySelector('.custom-modal-content').classList.add('slide-in');
+                    }, 10);
+                }
+            }
+
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.remove('is-open');
+                    modal.querySelector('.custom-modal-content').classList.remove('slide-in');
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                    }, 300);
+                }
+            }
+            
+            function switchAuthContent(isRegister) {
+                document.getElementById('register-content').style.display = isRegister ? 'block' : 'none';
+                document.getElementById('login-content').style.display = isRegister ? 'none' : 'block';
+            }
+            
+            // --- FUNCIONALIDAD DE REGISTRO/LOGIN ---
+
+            document.getElementById('register-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('reg-name').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const password = document.getElementById('reg-password').value;
+
+                if (users[email]) {
+                    showMessage('reg-message', 'Error: Este correo ya está registrado.', false);
+                    return;
+                }
+
+                // Generar datos iniciales (simulados pero realistas) solo al registrarse
+                const initialData = {
+                    sessions: 0, 
+                    calories: Math.floor(Math.random() * (400 - 150 + 1) + 150), 
+                    bpm: Math.floor(Math.random() * (150 - 120 + 1) + 120), 
+                    weight: (Math.random() * (4 - 0.5) + 0.5).toFixed(1)
+                };
+
+                const newUser = { name, email, password };
+                users[email] = newUser;
+                localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+                localStorage.setItem(`data_${email}`, JSON.stringify(initialData)); // Guardar datos iniciales
+
+                showMessage('reg-message', '¡Registro exitoso! Redirigiendo a tu cuenta...', true);
+                
+                setTimeout(() => {
+                    closeModal('authModal');
+                    currentUser = newUser;
+                    sessionStorage.setItem('fitlifesgo_session', JSON.stringify(newUser));
+                    // Redirección CLAVE
+                    window.location.href = 'dashboard.html'; 
+                }, 1500);
+            });
+            
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('log-email').value.trim();
+                const password = document.getElementById('log-password').value;
+                const user = users[email];
+
+                if (user && user.password === password) {
+                    showMessage('login-message', `¡Bienvenido de vuelta, ${user.name}!`, true);
+                    
+                    setTimeout(() => {
+                        closeModal('authModal');
+                        currentUser = user;
+                        sessionStorage.setItem('fitlifesgo_session', JSON.stringify(user));
+                        // Redirección CLAVE
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+
+                } else {
+                    showMessage('login-message', 'Error: Correo o contraseña incorrectos.', false);
+                }
+            });
+            
+            // --- CONFIGURACIÓN DE EVENT LISTENERS DE UI ---
+
+            // Asignar eventos de cierre de modales 
+            document.querySelectorAll('.custom-modal-close-btn, .close-modal-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const modalId = e.target.closest('.custom-modal-overlay').id;
+                    closeModal(modalId);
+                });
+            });
+
+            // Cierre al hacer clic fuera del modal
+            document.querySelectorAll('.custom-modal-overlay').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal(modal.id);
+                    }
+                });
+            });
+            
+            // Apertura de Modal de Autenticación
+            const authTriggers = document.querySelectorAll('#open-auth-modal-header, #open-auth-modal-hero, .show-auth-modal');
+            authTriggers.forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchAuthContent(true); // Por defecto, mostrar registro
+                    showModal('authModal');
+                });
+            });
+            
+            // Alternar entre Registro y Login
+            document.getElementById('link-to-login').addEventListener('click', (e) => { e.preventDefault(); switchAuthContent(false); });
+            document.getElementById('link-to-register').addEventListener('click', (e) => { e.preventDefault(); switchAuthContent(true); });
+
+            // Modales de información
+            document.getElementById('show-contact-modal').addEventListener('click', (e) => { e.preventDefault(); showModal('contactModal'); });
+            document.getElementById('show-about-modal').addEventListener('click', (e) => { e.preventDefault(); showModal('aboutModal'); });
+
+        });
+    </script>
+</body>
+
+</html>
