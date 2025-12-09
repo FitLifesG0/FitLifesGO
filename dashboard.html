@@ -26,10 +26,10 @@
             --color-card-shadow: rgba(0, 0, 0, 0.08); /* Sombra opaca */
         }
         
-        /* --- CORRECCIÓN DE HEADER (Barra delgada y Logo) --- */
+        /* --- HEADER (Barra delgada y Logo) --- */
         .header {
             background-color: #000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); /* Sombra opaca */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
             padding: 10px 0; /* Borde más delgado */
         }
         
@@ -41,7 +41,7 @@
         }
 
         .header .logo .go-accent {
-            color: var(--color-accent-go); /* ¡GO! en rojo-naranja */
+            color: var(--color-accent-go);
         }
 
         .navbar-list .navbar-link:hover,
@@ -61,43 +61,77 @@
             display: none !important; 
         }
 
-        /* --- CUERPO Y GRÁFICOS (Opacidad y Rojo Intenso) --- */
+        /* --- CUERPO Y GRÁFICOS --- */
         #dashboard-section {
             min-height: 100vh;
             padding: 100px 50px 50px; 
-            background-color: var(--color-bg-light); /* Fondo más opaco */
+            background-color: var(--color-bg-light);
             color: #333;
         }
 
-        .dashboard-subtitle { color: var(--color-text-secondary); }
         .dashboard-title { color: var(--color-red-intense); }
-        .welcome-subtitle { color: var(--color-text-secondary); }
+
+        /* GRID: Ajustado para 3 columnas principales */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 25px;
+            margin-bottom: 50px;
+        }
 
         .stat-card {
             background: #fff; 
-            box-shadow: 0 2px 10px var(--color-card-shadow); /* Sombra opaca */
+            box-shadow: 0 2px 10px var(--color-card-shadow);
         }
         
         .stat-card h3 {
             color: var(--color-red-intense);
         }
 
-        /* --- Gráfico Circular con Animación Corregida --- */
+        /* --- Gráfico Circular Funcional y Animado --- */
         .progress-circle {
-            background: #e0e0e0; /* Fondo del círculo más opaco */
+            width: 120px; 
+            height: 120px; 
+            border-radius: 50%;
+            margin: 10px auto;
+            position: relative;
+            background: #e0e0e0; /* Fondo del círculo opaco */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
         }
-
+        
         .progress-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            /* La propiedad CSS se actualiza en JS */
+            --progress-degree: 0deg; 
             background: conic-gradient(
                 var(--color-red-intense) var(--progress-degree), 
-                #e0e0e0 var(--progress-degree) /* Color de fondo opaco aquí también */
+                #e0e0e0 var(--progress-degree)
             );
-            /* Transición CLAVE para la animación del arco */
+            /* Transición para la animación */
             transition: background 1.5s ease-in-out; 
         }
         
         .progress-circle::after {
+            content: '';
+            position: absolute;
+            width: 105px; 
+            height: 105px;
+            border-radius: 50%;
             background: #fff; 
+        }
+
+        .progress-value {
+            position: relative;
+            z-index: 2;
+            font-size: 1.8rem; 
+            font-weight: 800;
+            color: #333; 
         }
 
         .stat-info span { color: var(--color-red-intense); }
@@ -108,14 +142,15 @@
         }
 
         .btn-simulate:hover {
-            background-color: #A30000; /* Rojo más oscuro para hover */
+            background-color: #A30000;
         }
 
-        /* --- Modales (Ajuste de color) --- */
+        /* --- Modales --- */
         .modal-header { border-bottom: 2px solid var(--color-red-intense); }
         .modal-icon { color: var(--color-red-intense); }
         .btn-primary { background-color: var(--color-red-intense); }
         .btn-primary:hover { background-color: #A30000; }
+        
     </style>
 </head>
 
@@ -190,20 +225,6 @@
                                 <div class="stat-info">
                                     <span id="data-calories-value">0</span>
                                     <small>Kcal. / Meta 700</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <h3>Ritmo Cardíaco</h3>
-                            <div class="progress-circle" id="circle-bpm">
-                                <div class="progress-fill"></div>
-                                <span class="progress-value">0%</span>
-                            </div>
-                            <div class="stat-footer">
-                                <div class="stat-info">
-                                    <span id="data-bpm-value">0</span>
-                                    <small>BPM / Zona Óptima</small>
                                 </div>
                             </div>
                         </div>
@@ -297,7 +318,18 @@
             }
 
             const getOrCreateUserData = (userEmail) => {
-                return JSON.parse(localStorage.getItem(`data_${userEmail}`) || 'null');
+                // Si no existen datos del usuario en localStorage, se crean con valores iniciales
+                let userData = JSON.parse(localStorage.getItem(`data_${userEmail}`) || 'null');
+                if (!userData) {
+                    userData = {
+                        sessions: 0,
+                        calories: 0,
+                        weight: "0.0",
+                        bpm: 120 // Valor inicial para simulación, aunque ya no se muestre
+                    };
+                    localStorage.setItem(`data_${userEmail}`, JSON.stringify(userData));
+                }
+                return userData;
             };
 
             // --- FUNCIONES DE MODALES ---
@@ -336,22 +368,22 @@
             setupModal('contactModal');
             setupModal('aboutModal');
 
-            // --- FUNCIONES DE GRÁFICOS Y DATOS (Animación Arreglada) ---
+            // --- FUNCIONES DE GRÁFICOS Y DATOS (Animación) ---
 
             function animateChart(circleId, progressPercentage) {
                 const circleFill = document.querySelector(`#${circleId} .progress-fill`);
                 const progressValue = document.querySelector(`#${circleId} .progress-value`);
                 
                 if (circleFill) {
+                    // Convertir porcentaje (0-100) a grados (0-360)
                     const degree = (progressPercentage / 100) * 360; 
                     
-                    // Aseguramos la transición del grado con CSS variable
+                    // Aplicar la transición del grado
                     requestAnimationFrame(() => {
                         circleFill.style.setProperty('--progress-degree', `${degree}deg`);
                         
-                        if (circleId !== 'circle-bpm') {
-                             progressValue.textContent = `${Math.round(progressPercentage)}%`;
-                        }
+                        // Actualizar valor de porcentaje en el centro
+                        progressValue.textContent = `${Math.round(progressPercentage)}%`;
                     });
                 }
             }
@@ -366,43 +398,36 @@
 
                 document.getElementById('dash-username').textContent = user.name || 'Miembro';
 
-                // 1. Sesiones
+                // 1. Sesiones (Meta 5)
                 const sessionsMax = 5;
                 const sessionsProgress = Math.min(userData.sessions, sessionsMax);
                 const progressPercent = (sessionsProgress / sessionsMax) * 100;
                 document.getElementById('data-sessions-value').textContent = `${sessionsProgress}/${sessionsMax}`;
                 animateChart('circle-sessions', progressPercent);
 
-                // 2. Calorías
+                // 2. Calorías (Meta 700 Kcal)
                 const caloriesGoal = 700;
                 const caloriesProgress = userData.calories;
                 const caloriesPercent = Math.min((caloriesProgress / caloriesGoal) * 100, 100);
                 document.getElementById('data-calories-value').textContent = `${caloriesProgress} Kcal.`;
                 animateChart('circle-calories', caloriesPercent);
                 
-                // 3. Ritmo Cardíaco
-                const bpmMaxChart = 160; 
-                const bpmProgress = userData.bpm;
-                const bpmPercent = Math.min((bpmProgress / bpmMaxChart) * 100, 100);
-                document.getElementById('data-bpm-value').textContent = `${bpmProgress} BPM`;
-                document.querySelector('#circle-bpm .progress-value').textContent = `${bpmProgress}`; 
-                // Para BPM, la animación puede representar el valor, aunque el texto sea el BPM
-                animateChart('circle-bpm', bpmPercent);
-                
-                // 4. Peso
+                // 3. Peso (Meta 5.0 Kg)
                 const weightGoal = 5;
                 const weightProgress = parseFloat(userData.weight);
                 const weightPercent = Math.min((weightProgress / weightGoal) * 100, 100);
                 document.getElementById('data-weight-value').textContent = `${weightProgress.toFixed(1)} Kg`;
                 animateChart('circle-weight', weightPercent);
+                
+                // Nota: La métrica de Ritmo Cardíaco (circle-bpm) fue eliminada.
             }
             
             function simulateWorkout(userEmail) {
                 const userData = getOrCreateUserData(userEmail);
 
+                // Aumentar datos simulados
                 userData.sessions = Math.min(userData.sessions + 1, 5); 
                 userData.calories += Math.floor(Math.random() * (350 - 200 + 1) + 200);
-                userData.bpm = Math.floor(Math.random() * (145 - 130 + 1) + 130);  
                 userData.weight = (parseFloat(userData.weight) + (Math.random() * (0.5 - 0.1) + 0.1)).toFixed(1);
 
                 localStorage.setItem(`data_${userEmail}`, JSON.stringify(userData));
