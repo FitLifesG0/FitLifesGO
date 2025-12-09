@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitLifes¡GO! - Dashboard Minimalista</title>
+    <title>FitLifes¡GO! - Dashboard Profesional</title>
 
     <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
@@ -17,111 +17,105 @@
         rel="stylesheet">
     
     <style>
-        /* Definimos el nuevo color de acento para ¡GO! */
+        /* Definición de colores opacos y el rojo intenso */
         :root {
-            --color-accent-go: #e65c00; /* Naranja-Rojizo suave */
-            --color-accent-main: #ff0000; /* Rojo principal para gráficos y botones */
+            --color-red-intense: #CC0000; /* Rojo más intenso */
+            --color-accent-go: #FF3300; /* Rojo-Naranja para ¡GO! */
+            --color-bg-light: #f5f5f5; /* Fondo más claro y opaco */
+            --color-text-secondary: #999; /* Gris más opaco */
+            --color-card-shadow: rgba(0, 0, 0, 0.08); /* Sombra opaca */
         }
         
-        /* --- CORRECCIÓN DE HEADER (Alinear Logo) --- */
+        /* --- CORRECCIÓN DE HEADER (Barra delgada y Logo) --- */
         .header {
             background-color: #000;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); /* Sombra opaca */
+            padding: 10px 0; /* Borde más delgado */
         }
         
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
         .header .logo {
             color: #fff;
             font-size: 2rem;
-            display: flex; /* Asegura que el icono y el span estén alineados */
-            align-items: center;
-        }
-
-        .header .logo ion-icon {
-             margin-right: 5px;
-        }
-        
-        .header .logo .span {
-            font-weight: 800;
-            /* Flex dentro del span para asegurar FitLifes y ¡GO! estén juntos */
             display: flex;
             align-items: center;
         }
 
         .header .logo .go-accent {
-            color: var(--color-accent-go); /* ¡GO! en naranja-rojizo */
-            margin-left: 0; /* Eliminar margen extra */
-        }
-
-        .navbar-list .navbar-link {
-            color: #fff; 
-            font-weight: 500;
+            color: var(--color-accent-go); /* ¡GO! en rojo-naranja */
         }
 
         .navbar-list .navbar-link:hover,
         .navbar-list .navbar-link.active {
-            color: var(--color-accent-main); 
+            color: var(--color-red-intense); 
         }
 
         .btn-secondary {
-            background-color: transparent;
-            color: var(--color-accent-main);
-            border: 1px solid var(--color-accent-main);
-            padding: 8px 15px; 
-            font-size: 0.9rem;
-            border-radius: 4px;
-            transition: all 0.2s;
+            color: var(--color-red-intense);
+            border: 1px solid var(--color-red-intense);
         }
         .btn-secondary:hover {
-            background-color: var(--color-accent-main);
-            color: #fff;
+            background-color: var(--color-red-intense);
         }
 
         #logout-btn-header {
             display: none !important; 
         }
 
-        /* --- CUERPO Y GRÁFICOS (Ajuste de color principal) --- */
+        /* --- CUERPO Y GRÁFICOS (Opacidad y Rojo Intenso) --- */
         #dashboard-section {
             min-height: 100vh;
             padding: 100px 50px 50px; 
-            background-color: #e9e9e9; 
+            background-color: var(--color-bg-light); /* Fondo más opaco */
             color: #333;
         }
 
-        .dashboard-title { color: var(--color-accent-main); font-weight: 800; }
-        .stat-card h3 { color: var(--color-accent-main); }
+        .dashboard-subtitle { color: var(--color-text-secondary); }
+        .dashboard-title { color: var(--color-red-intense); }
+        .welcome-subtitle { color: var(--color-text-secondary); }
 
-        .progress-fill {
-            --progress-degree: 0deg; 
-            background: conic-gradient(
-                var(--color-accent-main) var(--progress-degree), 
-                #f0f0f0 var(--progress-degree)
-            );
-            transition: background 1s ease-out; 
+        .stat-card {
+            background: #fff; 
+            box-shadow: 0 2px 10px var(--color-card-shadow); /* Sombra opaca */
+        }
+        
+        .stat-card h3 {
+            color: var(--color-red-intense);
         }
 
-        .stat-info span { color: var(--color-accent-main); }
+        /* --- Gráfico Circular con Animación Corregida --- */
+        .progress-circle {
+            background: #e0e0e0; /* Fondo del círculo más opaco */
+        }
+
+        .progress-fill {
+            background: conic-gradient(
+                var(--color-red-intense) var(--progress-degree), 
+                #e0e0e0 var(--progress-degree) /* Color de fondo opaco aquí también */
+            );
+            /* Transición CLAVE para la animación del arco */
+            transition: background 1.5s ease-in-out; 
+        }
+        
+        .progress-circle::after {
+            background: #fff; 
+        }
+
+        .stat-info span { color: var(--color-red-intense); }
+        .stat-info small { color: var(--color-text-secondary); }
         
         .btn-simulate {
-            background-color: var(--color-accent-main);
+            background-color: var(--color-red-intense);
         }
 
         .btn-simulate:hover {
-            background-color: #cc0000;
+            background-color: #A30000; /* Rojo más oscuro para hover */
         }
 
         /* --- Modales (Ajuste de color) --- */
-        .modal-header { border-bottom: 2px solid var(--color-accent-main); }
-        .modal-icon { color: var(--color-accent-main); }
-        .btn-primary { background-color: var(--color-accent-main); }
-        .btn-primary:hover { background-color: #cc0000; }
+        .modal-header { border-bottom: 2px solid var(--color-red-intense); }
+        .modal-icon { color: var(--color-red-intense); }
+        .btn-primary { background-color: var(--color-red-intense); }
+        .btn-primary:hover { background-color: #A30000; }
     </style>
 </head>
 
@@ -275,7 +269,7 @@
                 Somos estudiantes del **CBTis 132 Hermosillo, Sonora**. Esta página fue creada con la finalidad de
                 destacar y ayudar a gente en un futuro con este proyecto.
             </p>
-            <p style="text-align: center; margin-top: 15px; font-weight: bold; color: var(--color-accent-main);">Equipo Creador:</p>
+            <p style="text-align: center; margin-top: 15px; font-weight: bold; color: var(--color-red-intense);">Equipo Creador:</p>
             <ul style="list-style: none; padding: 0; text-align: center; font-size: 0.9rem;">
                 <li>Jesús Abraham López Gutiérrez</li>
                 <li>Jonathan Alexis Payán Enríquez</li>
@@ -342,7 +336,7 @@
             setupModal('contactModal');
             setupModal('aboutModal');
 
-            // --- FUNCIONES DE GRÁFICOS Y DATOS ---
+            // --- FUNCIONES DE GRÁFICOS Y DATOS (Animación Arreglada) ---
 
             function animateChart(circleId, progressPercentage) {
                 const circleFill = document.querySelector(`#${circleId} .progress-fill`);
@@ -351,6 +345,7 @@
                 if (circleFill) {
                     const degree = (progressPercentage / 100) * 360; 
                     
+                    // Aseguramos la transición del grado con CSS variable
                     requestAnimationFrame(() => {
                         circleFill.style.setProperty('--progress-degree', `${degree}deg`);
                         
@@ -391,6 +386,7 @@
                 const bpmPercent = Math.min((bpmProgress / bpmMaxChart) * 100, 100);
                 document.getElementById('data-bpm-value').textContent = `${bpmProgress} BPM`;
                 document.querySelector('#circle-bpm .progress-value').textContent = `${bpmProgress}`; 
+                // Para BPM, la animación puede representar el valor, aunque el texto sea el BPM
                 animateChart('circle-bpm', bpmPercent);
                 
                 // 4. Peso
