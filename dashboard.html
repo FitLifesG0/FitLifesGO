@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitLifes!GO¡ - Dashboard Minimalista</title>
+    <title>FitLifes¡GO! - Dashboard Minimalista</title>
 
     <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
@@ -17,69 +17,17 @@
         rel="stylesheet">
     
     <style>
-        /* --- CORRECCIÓN DE MODALES (Asegurar que estén ocultos) --- */
-        .custom-modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            display: none; /* CLAVE: Ocultar por defecto */
-            justify-content: center; 
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .custom-modal-overlay.is-open { opacity: 1; display: flex; }
-
-        .custom-modal-content {
-            background-color: #222; 
-            color: #fff;
-            padding: 30px; border-radius: 12px; width: 90%; max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            position: relative; transform: translateY(-50px);
-            opacity: 0; transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-        }
-
-        .custom-modal-content.slide-in {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .custom-modal-close-btn { 
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #fff;
+        /* Definimos el nuevo color de acento para ¡GO! */
+        :root {
+            --color-accent-go: #e65c00; /* Naranja-Rojizo suave */
+            --color-accent-main: #ff0000; /* Rojo principal para gráficos y botones */
         }
         
-        .modal-header { border-bottom: 2px solid #ff0000; padding-bottom: 10px; margin-bottom: 20px;}
-        .modal-icon { color: #ff0000; font-size: 2.5rem; margin-right: 15px; }
-        .modal-title { color: #fff; font-size: 2rem; }
-        .btn-primary { 
-            background-color: #ff0000; 
-            color: white; 
-            border: none; 
-            padding: 12px 25px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            transition: background-color 0.3s;
-            display: block;
-            width: 100%;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        /* --- CORRECCIÓN DE HEADER (Asegurar tamaño y fondo) --- */
+        /* --- CORRECCIÓN DE HEADER (Alinear Logo) --- */
         .header {
-            background-color: #000; /* Barra negra sólida */
+            background-color: #000;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            padding: 15px 0; /* Espaciado más compacto */
+            padding: 15px 0;
         }
         
         .header .container {
@@ -90,11 +38,25 @@
 
         .header .logo {
             color: #fff;
-            font-size: 2rem; /* Tamaño de fuente para el logo */
+            font-size: 2rem;
+            display: flex; /* Asegura que el icono y el span estén alineados */
+            align-items: center;
+        }
+
+        .header .logo ion-icon {
+             margin-right: 5px;
         }
         
-        .header .logo .red-accent {
-            color: #ff0000; /* !GO¡ en rojo */
+        .header .logo .span {
+            font-weight: 800;
+            /* Flex dentro del span para asegurar FitLifes y ¡GO! estén juntos */
+            display: flex;
+            align-items: center;
+        }
+
+        .header .logo .go-accent {
+            color: var(--color-accent-go); /* ¡GO! en naranja-rojizo */
+            margin-left: 0; /* Eliminar margen extra */
         }
 
         .navbar-list .navbar-link {
@@ -104,20 +66,20 @@
 
         .navbar-list .navbar-link:hover,
         .navbar-list .navbar-link.active {
-            color: #ff0000; 
+            color: var(--color-accent-main); 
         }
 
         .btn-secondary {
             background-color: transparent;
-            color: #ff0000;
-            border: 1px solid #ff0000;
+            color: var(--color-accent-main);
+            border: 1px solid var(--color-accent-main);
             padding: 8px 15px; 
             font-size: 0.9rem;
             border-radius: 4px;
             transition: all 0.2s;
         }
         .btn-secondary:hover {
-            background-color: #ff0000;
+            background-color: var(--color-accent-main);
             color: #fff;
         }
 
@@ -125,7 +87,7 @@
             display: none !important; 
         }
 
-        /* --- CUERPO Y GRÁFICOS (Minimalista) --- */
+        /* --- CUERPO Y GRÁFICOS (Ajuste de color principal) --- */
         #dashboard-section {
             min-height: 100vh;
             padding: 100px 50px 50px; 
@@ -133,113 +95,33 @@
             color: #333;
         }
 
-        .dashboard-container { max-width: 1200px; margin: auto; }
-        .dashboard-subtitle { font-size: 1.5rem; color: #555; margin-bottom: 5px; }
-        .dashboard-title { font-size: 3.5rem; margin-bottom: 5px; color: #ff0000; font-weight: 800; }
-        .welcome-subtitle { font-size: 1rem; margin-bottom: 40px; color: #777; }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            margin-bottom: 50px;
-        }
-
-        .stat-card {
-            background: #fff; 
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-            text-align: center;
-            color: #333;
-        }
-        
-        .stat-card h3 {
-            font-size: 1.2rem;
-            color: #ff0000;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .progress-circle {
-            width: 120px; 
-            height: 120px; 
-            border-radius: 50%;
-            margin: 10px auto;
-            position: relative;
-            background: #f0f0f0; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-        }
+        .dashboard-title { color: var(--color-accent-main); font-weight: 800; }
+        .stat-card h3 { color: var(--color-accent-main); }
 
         .progress-fill {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
             --progress-degree: 0deg; 
             background: conic-gradient(
-                #ff0000 var(--progress-degree), 
+                var(--color-accent-main) var(--progress-degree), 
                 #f0f0f0 var(--progress-degree)
             );
             transition: background 1s ease-out; 
         }
-        
-        .progress-circle::after {
-            content: '';
-            position: absolute;
-            width: 105px; 
-            height: 105px;
-            border-radius: 50%;
-            background: #fff; 
-        }
 
-        .progress-value {
-            position: relative;
-            z-index: 2;
-            font-size: 1.8rem; 
-            font-weight: 800;
-            color: #333; 
-        }
-
-        .stat-footer { margin-top: 15px; }
-
-        .stat-info span {
-            display: block;
-            font-size: 1.1rem;
-            color: #ff0000;
-            font-weight: 700;
-        }
-
-        .stat-info small {
-            font-size: 0.8rem;
-            color: #777; 
-        }
+        .stat-info span { color: var(--color-accent-main); }
         
         .btn-simulate {
-            margin: 40px auto;
-            padding: 12px 40px;
-            font-size: 1rem;
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            font-weight: 600;
+            background-color: var(--color-accent-main);
         }
 
         .btn-simulate:hover {
             background-color: #cc0000;
         }
 
-        /* Ocultar la galería y su título (Confirmando la eliminación) */
-        .gallery-title, .gallery-grid {
-            display: none !important;
-        }
+        /* --- Modales (Ajuste de color) --- */
+        .modal-header { border-bottom: 2px solid var(--color-accent-main); }
+        .modal-icon { color: var(--color-accent-main); }
+        .btn-primary { background-color: var(--color-accent-main); }
+        .btn-primary:hover { background-color: #cc0000; }
     </style>
 </head>
 
@@ -250,7 +132,7 @@
 
             <a href="index.html" class="logo">
                 <ion-icon name="barbell-sharp" aria-hidden="true"></ion-icon>
-                <span class="span">FitLifes<span class="red-accent">!GO¡</span></span>
+                <span class="span">FitLifes<span class="go-accent">¡GO!</span></span>
             </a>
 
             <nav class="navbar" data-navbar>
@@ -359,7 +241,7 @@
         <div class="footer-bottom">
             <div class="container">
                 <p class="copyright">
-                    &copy; 2025 FitLifes!GO¡. Todos los derechos reservados.
+                    &copy; 2025 FitLifes<span class="go-accent">¡GO!</span>. Todos los derechos reservados.
                 </p>
             </div>
         </div>
@@ -375,7 +257,7 @@
             <p style="margin-bottom: 20px;">
                 Estamos aquí para asistirte con cualquier duda sobre rutinas, membresías o soporte técnico.
             </p>
-            <a href="mailto:fitlifesgo.soporte@gmail.com" class="btn btn-primary" style="background-color: #ff0000;">
+            <a href="mailto:fitlifesgo.soporte@gmail.com" class="btn btn-primary">
                 Contáctanos por Email
             </a>
             <button class="btn btn-primary close-modal-btn" data-modal-target="contactModal" style="margin-top: 10px; background-color: #444;">Cerrar</button>
@@ -393,14 +275,14 @@
                 Somos estudiantes del **CBTis 132 Hermosillo, Sonora**. Esta página fue creada con la finalidad de
                 destacar y ayudar a gente en un futuro con este proyecto.
             </p>
-            <p style="text-align: center; margin-top: 15px; font-weight: bold; color: #ff0000;">Equipo Creador:</p>
+            <p style="text-align: center; margin-top: 15px; font-weight: bold; color: var(--color-accent-main);">Equipo Creador:</p>
             <ul style="list-style: none; padding: 0; text-align: center; font-size: 0.9rem;">
                 <li>Jesús Abraham López Gutiérrez</li>
                 <li>Jonathan Alexis Payán Enríquez</li>
                 <li>Sebastián Terán Rubio</li>
                 <li>Jesús Ernesto Cortez Ibarra</li>
             </ul>
-            <button class="btn btn-primary close-modal-btn" data-modal-target="aboutModal" style="margin-top: 20px; background-color: #ff0000;">¡Genial!</button>
+            <button class="btn btn-primary close-modal-btn" data-modal-target="aboutModal" style="margin-top: 20px;">¡Genial!</button>
         </div>
     </div>
 
@@ -415,7 +297,6 @@
             
             let currentUser = JSON.parse(sessionStorage.getItem('fitlifesgo_session') || 'null');
             
-            // REDIRECCIÓN DE SEGURIDAD
             if (!currentUser) {
                 window.location.href = 'index.html';
                 return; 
@@ -425,7 +306,7 @@
                 return JSON.parse(localStorage.getItem(`data_${userEmail}`) || 'null');
             };
 
-            // --- FUNCIONES DE MODALES CORREGIDAS ---
+            // --- FUNCIONES DE MODALES ---
             function showModal(modalId) {
                 const modal = document.getElementById(modalId);
                 if (modal) {
@@ -473,7 +354,6 @@
                     requestAnimationFrame(() => {
                         circleFill.style.setProperty('--progress-degree', `${degree}deg`);
                         
-                        // Si no es el BPM, muestra el porcentaje. El BPM ya tiene su valor puro en renderDashboard.
                         if (circleId !== 'circle-bpm') {
                              progressValue.textContent = `${Math.round(progressPercentage)}%`;
                         }
