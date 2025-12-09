@@ -1,446 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitLifes!GO¡ - Club de Fitness Profesional</title>
-
-    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
-
-    <link rel="stylesheet" href="./assets/css/style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Catamaran:wght@600;700;800;900&family=Rubik:wght@400;500;800&display=swap"
-        rel="stylesheet">
-
-    <link rel="preload" as="image" href="./assets/images/hero-banner.png">
-    <link rel="preload" as="image" href="./assets/images/hero-circle-one.png">
-    <link rel="preload" as="image" href="./assets/images/hero-circle-two.png">
-    <link rel="preload" as="image" href="./assets/images/heart-rate.svg">
-    <link rel="preload" as="image" href="./assets/images/calories.svg">
-
-    <style>
-        /* --- ESTILOS COMPARTIDOS DEL MODAL Y FORMULARIO (Sin Cambios Mayores) --- */
-        .custom-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .custom-modal-overlay.is-open { opacity: 1; }
-
-        .custom-modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            position: relative;
-            transform: translateY(-50px);
-            opacity: 0;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-        }
-
-        .custom-modal-content.slide-in {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 15px;
-        }
-
-        .modal-icon { font-size: 2.5rem; color: orange; margin-right: 15px; }
-        .modal-title { font-size: 1.8rem; color: #333; margin: 0; }
-        .auth-form input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .form-message { margin-top: 10px; padding: 10px; border-radius: 4px; text-align: center; font-weight: 500; }
-        .form-message.error { background-color: #f8d7da; color: #721c24; }
-        .form-message.success { background-color: #d4edda; color: #155724; }
-
-        /* --- DASHBOARD Y GRÁFICOS MEJORADOS --- */
-        #dashboard-section {
-            display: none;
-            min-height: 100vh;
-            padding: 100px 20px 50px; /* Ajuste de padding */
-            background-color: #0d0d0d; /* Fondo más oscuro */
-            color: white;
-            transition: all 0.5s ease-in-out;
-        }
-
-        .dashboard-container {
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .dashboard-title {
-            text-align: center;
-            font-size: 3.5rem;
-            margin-bottom: 5px;
-            color: #ff6f00; /* Naranja más vibrante */
-        }
-        
-        .welcome-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            color: #aaa;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .stat-card {
-            background: #1a1a1a;
-            padding: 30px 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
-            border: 1px solid #333;
-            transition: transform 0.3s ease;
-            text-align: center;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(255, 0, 0, 0.3); /* Sutil efecto rojo/sombra */
-        }
-
-        /* Gráfico circular con transición suave */
-        .progress-circle {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            margin: 20px auto;
-            position: relative;
-            background: conic-gradient(red 0%, red var(--progress, 0%), #444 0%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* La transición se aplicará en JS al cambiar la variable CSS */
-            transition: background 1s linear; 
-        }
-
-        .progress-circle::after {
-            content: '';
-            position: absolute;
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: #0d0d0d;
-        }
-
-        .progress-value {
-            position: relative;
-            z-index: 2;
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: white;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            color: #ff6f00;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        
-        .stat-data {
-            font-size: 0.9rem;
-            color: #ccc;
-            margin-top: 5px;
-        }
-
-    </style>
-</head>
-
-<body id="top">
-
-    <header class="header" data-header>
-        <div class="container">
-
-            <a href="#" class="logo">
-                <ion-icon name="barbell-sharp" aria-hidden="true"></ion-icon>
-                <span class="span">FitLifes!GO¡</span>
-            </a>
-
-            <nav class="navbar" data-navbar>
-                <button class="nav-close-btn" aria-label="cerrar menú" data-nav-toggler>
-                    <ion-icon name="close-sharp" aria-hidden="true"></ion-icon>
-                </button>
-
-                <ul class="navbar-list">
-                    <li><a href="#" class="navbar-link active" data-nav-link id="nav-home">Inicio</a></li>
-                    <li><a href="#" class="navbar-link" id="show-about-modal">Nosotros</a></li>
-                    <li><a href="#" class="navbar-link" id="show-classes-warning">Clases</a></li>
-                    <li><a href="#" class="navbar-link" id="show-blog-warning">Blog</a></li>
-                    <li><a href="#" class="navbar-link" id="show-contact-modal">Contacto</a></li>
-                    
-                    <li><a href="#" class="navbar-link nav-logged-in" id="nav-dashboard" style="display: none;">Mi Cuenta</a></li>
-                    <li><a href="#" class="btn btn-secondary nav-logged-in" id="logout-btn" style="display: none;">Cerrar Sesión</a></li>
-                </ul>
-            </nav>
-
-            <a href="#" class="btn btn-secondary nav-logged-out" id="open-auth-modal-header">Únete Ahora</a>
-
-            <button class="nav-open-btn" aria-label="abrir menú" data-nav-toggler>
-                <span class="line"></span>
-                <span class="line"></span>
-                <span class="line"></span>
-            </button>
-
-        </div>
-    </header>
-
-    <main>
-        <article>
-
-            <section class="section hero bg-dark has-after has-bg-image" id="home-section" aria-label="inicio" data-section
-                style="background-image: url('./assets/images/hero-bg.png'); min-height: 100vh;">
-                <div class="container">
-
-                    <div class="hero-content">
-
-                        <p class="hero-subtitle">
-                            <strong class="strong">El Mejor</strong> Club de Fitness
-                        </p>
-
-                        <h1 class="h1 hero-title">Esfuérzate por una Vida Mejor</h1>
-
-                        <p class="section-text">
-                            Transforma tu cuerpo y tu mente con nuestros programas personalizados y entrenadores
-                            expertos.
-                        </p>
-
-                        <a href="#" class="btn btn-primary nav-logged-out" id="open-auth-modal-hero">Empezar Ahora</a>
-
-                    </div>
-
-                    <div class="hero-banner">
-
-                        <img src="./assets/images/hero-banner.png" width="500" height="570" alt="Atleta entrenando"
-                            class="w-100">
-
-                        <img src="./assets/images/hero-circle-one.png" width="666" height="666" aria-hidden="true" alt=""
-                            class="circle circle-1">
-                        <img src="./assets/images/hero-circle-two.png" width="666" height="666" aria-hidden="true" alt=""
-                            class="circle circle-2">
-
-                        <img src="./assets/images/heart-rate.svg" width="255" height="270" alt="ritmo cardíaco"
-                            class="abs-img abs-img-1">
-                        <img src="./assets/images/calories.svg" width="348" height="224" alt="calorías"
-                            class="abs-img abs-img-2">
-
-                    </div>
-
-                </div>
-            </section>
-            
-            <section id="dashboard-section" aria-label="Mi Cuenta">
-                <div class="dashboard-container">
-                    <h1 class="dashboard-title">Dashboard</h1>
-                    <p class="welcome-subtitle">Bienvenido, <span id="dash-username">Usuario</span>. ¡Aquí está tu progreso!</p>
-                    
-                    <div class="stats-grid">
-                        
-                        <div class="stat-card">
-                            <h3>Progreso Semanal 💪</h3>
-                            <div class="progress-circle" id="circle-progress">
-                                <span class="progress-value">--%</span>
-                            </div>
-                            <p class="stat-label">Objetivo de entrenamiento</p>
-                            <p class="stat-data" id="data-progress">0 de 5 sesiones completadas</p>
-                        </div>
-
-                        <div class="stat-card">
-                            <h3>Quema de Calorías 🔥</h3>
-                            <div class="progress-circle" id="circle-calories">
-                                <span class="progress-value">--</span>
-                            </div>
-                            <p class="stat-label">Kcal. quemadas hoy</p>
-                            <p class="stat-data" id="data-calories">Meta diaria: 700 Kcal.</p>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <h3>Ritmo Cardíaco Prom. ❤️</h3>
-                            <div class="progress-circle" id="circle-bpm">
-                                <span class="progress-value">--</span>
-                            </div>
-                            <p class="stat-label">BPM promedio en sesión</p>
-                            <p class="stat-data" id="data-bpm">Zona óptima: 120-150 BPM</p>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <h3>Meta de Peso ⚖️</h3>
-                            <div class="progress-circle" id="circle-weight">
-                                <span class="progress-value">--</span>
-                            </div>
-                            <p class="stat-label">Kg. alcanzados este mes</p>
-                            <p class="stat-data" id="data-weight">Faltan 2.5 Kg. para el objetivo</p>
-                        </div>
-                        
-                    </div>
-                    
-                </div>
-            </section>
-
-        </article>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-bottom">
-            <div class="container">
-                <p class="copyright">
-                    &copy; 2025 FitLifes!GO¡. Todos los derechos reservados.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <div id="contactModal" class="custom-modal-overlay">
-        <div class="custom-modal-content">
-            <button class="custom-modal-close-btn" data-modal-target="contactModal">&times;</button>
-            <div class="modal-header">
-                <ion-icon name="help-circle-sharp" class="modal-icon"></ion-icon>
-                <h2 class="modal-title">¿Necesitas Ayuda?</h2>
-            </div>
-            <p class="modal-body-text">
-                Estamos aquí para asistirte con cualquier duda sobre rutinas, membresías o soporte técnico.
-            </p>
-            <div class="contact-info-box">
-                <p class="info-label">Contáctanos por correo electrónico:</p>
-                <a href="mailto:fitlifesgo.soporte@gmail.com" class="contact-email-link">
-                    fitlifesgo.soporte@gmail.com
-                </a>
-            </div>
-            <button class="btn btn-secondary close-modal-btn" data-modal-target="contactModal">Entendido</button>
-        </div>
-    </div>
-
-    <div id="aboutModal" class="custom-modal-overlay">
-        <div class="custom-modal-content">
-            <button class="custom-modal-close-btn" data-modal-target="aboutModal">&times;</button>
-            <div class="modal-header">
-                <ion-icon name="people-sharp" class="modal-icon"></ion-icon>
-                <h2 class="modal-title">Nuestro Proyecto y Creadores</h2>
-            </div>
-            <p class="modal-body-text">
-                Somos estudiantes del **CBTis 132 Hermosillo, Sonora**. Esta página fue creada con la finalidad de
-                destacar y ayudar a gente en un futuro con este proyecto, ¡que ojalá algún día crezca más!
-            </p>
-            <p class="info-label">**Equipo Creador:**</p>
-            <ul style="list-style: none; padding: 0; text-align: center;">
-                <li>Jesús Abraham López Gutiérrez</li>
-                <li>Jonathan Alexis Payán Enríquez</li>
-                <li>Sebastián Terán Rubio</li>
-                <li>Jesús Ernesto Cortez Ibarra</li>
-            </ul>
-            <button class="btn btn-secondary close-modal-btn" data-modal-target="aboutModal">¡Genial!</button>
-        </div>
-    </div>
-
-    <div id="warningModal" class="custom-modal-overlay">
-        <div class="custom-modal-content">
-            <button class="custom-modal-close-btn" data-modal-target="warningModal">&times;</button>
-            <div class="modal-header">
-                <ion-icon name="alert-circle-sharp" class="modal-icon warning-text" style="color: red;"></ion-icon>
-                <h2 class="modal-title warning-text">¡Acceso Restringido!</h2>
-            </div>
-            <p class="modal-body-text">
-                Debes iniciar sesión para acceder a las secciones de **Clases** y **Blog**. Por favor, regístrate o
-                inicia sesión para ver este contenido.
-            </p>
-            <button class="btn btn-secondary close-modal-btn" data-modal-target="warningModal">Cerrar</button>
-        </div>
-    </div>
-
-    <div id="authModal" class="custom-modal-overlay">
-        <div class="custom-modal-content">
-            <button class="custom-modal-close-btn" data-modal-target="authModal">&times;</button>
-
-            <div id="register-content">
-                <div class="modal-header">
-                    <ion-icon name="person-add-sharp" class="modal-icon"></ion-icon>
-                    <h2 class="modal-title">Regístrate Ahora</h2>
-                </div>
-
-                <form class="auth-form" id="register-form">
-                    <div class="form-group">
-                        <label for="reg-name">Nombre</label>
-                        <input type="text" id="reg-name" placeholder="Tu nombre completo" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-email">Correo Electrónico</label>
-                        <input type="email" id="reg-email" placeholder="ejemplo@correo.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-password">Contraseña</label>
-                        <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" minlength="6" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Crear Cuenta FitLifes!GO¡</button>
-                    <p id="reg-message" class="form-message" style="display: none;"></p>
-                </form>
-
-                <p class="auth-toggle-link">
-                    ¿Ya tienes una cuenta?
-                    <a href="#" id="link-to-login">Inicia Sesión</a>
-                </p>
-            </div>
-
-            <div id="login-content" style="display: none;">
-                <div class="modal-header">
-                    <ion-icon name="log-in-sharp" class="modal-icon"></ion-icon>
-                    <h2 class="modal-title">Iniciar Sesión</h2>
-                </div>
-
-                <form class="auth-form" id="login-form">
-                    <div class="form-group">
-                        <label for="log-email">Correo Electrónico</label>
-                        <input type="email" id="log-email" placeholder="ejemplo@correo.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="log-password">Contraseña</label>
-                        <input type="password" id="log-password" placeholder="Tu contraseña" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Acceder</button>
-                    <p id="login-message" class="form-message" style="display: none;"></p>
-                </form>
-
-                <p class="auth-toggle-link">
-                    ¿No tienes una cuenta?
-                    <a href="#" id="link-to-register">Regístrate</a>
-                </p>
-            </div>
-
-        </div>
-    </div>
-
-
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
 
             // --- VARIABLES GLOBALES Y ALMACENAMIENTO ---
@@ -512,7 +70,7 @@
                     circle.style.setProperty('--progress', `0%`);
                     // Usamos requestAnimationFrame para asegurar que la UI se actualice antes de la transición
                     requestAnimationFrame(() => {
-                         circle.style.setProperty('--progress', `${progressPercentage}%`);
+                            circle.style.setProperty('--progress', `${progressPercentage}%`);
                     });
                 }
             }
@@ -571,13 +129,13 @@
                 // Aumentar datos simulados de forma realista
                 userData.sessions = Math.min(userData.sessions + 1, 5); // Máximo 5 sesiones
                 userData.calories += Math.floor(Math.random() * (350 - 200 + 1) + 200);
-                userData.bpm = Math.floor(Math.random() * (145 - 130 + 1) + 130); 
+                userData.bpm = Math.floor(Math.random() * (145 - 130 + 1) + 130);  
                 userData.weight = (parseFloat(userData.weight) + (Math.random() * (0.5 - 0.1) + 0.1)).toFixed(1);
 
                 localStorage.setItem(`data_${userEmail}`, JSON.stringify(userData));
                 
                 // Forzar la re-renderización para mostrar nuevos datos y animaciones
-                renderDashboard(currentUser); 
+                renderDashboard(currentUser);  
                 alert('¡Sesión registrada! Datos actualizados.');
             }
 
@@ -588,7 +146,7 @@
                 const loggedOutElements = document.querySelectorAll('.nav-logged-out');
 
                 if (user) {
-                    // Mostrar Dashboard, ocultar Inicio
+                    // **MODIFICACIÓN CLAVE: Muestra el Dashboard**
                     document.getElementById('home-section').style.display = 'none';
                     document.getElementById('dashboard-section').style.display = 'block';
                     
@@ -599,7 +157,7 @@
                     
                     renderDashboard(user); // Cargar datos reales
                 } else {
-                    // Mostrar Inicio, ocultar Dashboard
+                    // **MODIFICACIÓN CLAVE: Muestra el Inicio**
                     document.getElementById('home-section').style.display = 'block';
                     document.getElementById('dashboard-section').style.display = 'none';
 
@@ -612,8 +170,9 @@
             function logout() {
                 currentUser = null;
                 sessionStorage.removeItem('fitlifesgo_session');
-                updateUI(null);
-                alert('Sesión cerrada. ¡Vuelve pronto!');
+                // **MODIFICACIÓN CLAVE: Redirigir a index.html después de cerrar sesión**
+                alert('Sesión cerrada. ¡Redirigiendo a la página de inicio!');
+                window.location.href = 'index.html'; 
             }
             
             // --- FUNCIONALIDAD DE REGISTRO/LOGIN ---
@@ -640,7 +199,8 @@
                     currentUser = newUser;
                     sessionStorage.setItem('fitlifesgo_session', JSON.stringify(newUser));
                     // Al registrarse, aseguramos que sus datos iniciales se creen
-                    getOrCreateUserData(email); 
+                    getOrCreateUserData(email);  
+                    // **MODIFICACIÓN CLAVE: Redirige al Dashboard (dentro de index.html)**
                     updateUI(newUser);
                 }, 1500);
             });
@@ -658,7 +218,8 @@
                         closeModal('authModal');
                         currentUser = user;
                         sessionStorage.setItem('fitlifesgo_session', JSON.stringify(user));
-                        updateUI(user);
+                        // **MODIFICACIÓN CLAVE: Redirige al Dashboard (dentro de index.html)**
+                        updateUI(user); 
                     }, 1500);
 
                 } else {
@@ -706,14 +267,24 @@
             document.getElementById('link-to-register').addEventListener('click', (e) => { e.preventDefault(); switchAuthContent(true); });
 
             // Navegación de Inicio y Dashboard
+            // En el caso de GitHub Pages, la navegación puede manejar el estado.
+            // Si el usuario está logueado, al hacer clic en 'Inicio' se cerrará la sesión.
             document.getElementById('nav-home').addEventListener('click', (e) => {
                 e.preventDefault();
-                updateUI(null); // Siempre vuelve a la vista de inicio pública
+                // Si ya está en la vista de inicio (no logueado), no hace nada.
+                if (currentUser) {
+                    logout(); // Redirige a index.html y cierra sesión
+                } else {
+                    updateUI(null); // Si no está logueado, muestra la sección de inicio
+                }
             });
 
             document.getElementById('nav-dashboard').addEventListener('click', (e) => {
                 e.preventDefault();
-                updateUI(currentUser); // Muestra el dashboard si hay sesión
+                // Si el usuario está logueado, muestra el dashboard
+                if (currentUser) {
+                    updateUI(currentUser); 
+                }
             });
 
 
@@ -723,7 +294,14 @@
             
             const warningLinks = document.querySelectorAll('#show-classes-warning, #show-blog-warning');
             warningLinks.forEach(link => {
-                link.addEventListener('click', (e) => { e.preventDefault(); showModal('warningModal'); });
+                link.addEventListener('click', (e) => { 
+                    e.preventDefault(); 
+                    if (!currentUser) {
+                        showModal('warningModal'); 
+                    } else {
+                        alert('¡Contenido de Clases/Blog cargado! (Simulación)');
+                    }
+                });
             });
 
             // --- INICIALIZACIÓN ---
